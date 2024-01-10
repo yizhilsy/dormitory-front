@@ -56,4 +56,9 @@ export const echoUserAvatorService = (username) =>{
     return request.get('/avator'+'/'+username);
 }
 
+//调用后端回显该用户帖子的函数
+export const echoMyPageService = (username) =>{
+    return request.get('/square/mypage'+'/'+username);
+}
+
 

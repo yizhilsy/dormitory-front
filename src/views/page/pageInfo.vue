@@ -23,8 +23,6 @@ const userInfoStore = useUserInfoStore();
 const userInfo = ref({...userInfoStore.info})
 
 
-
-
 //replyPages的数据模型
 const replyPages = ref([
     {
@@ -101,7 +99,6 @@ const visibleDrawer = ref(false);
 import {replyPagePostService} from '@/api/square.js'
 import { ElMessage } from 'element-plus';
 const replyPagePost = async(id) =>{
-    //后端还未交互完毕，暂时写死
     articleReplyPage.value.username = userInfo.value.username;
     articleReplyPage.value.name = userInfo.value.nickname;
     let result = await replyPagePostService(id,articleReplyPage.value)
@@ -140,58 +137,66 @@ const cancelreply = () =>{
         </div>
     </template>
     
+    <div class="border-container">
+        <el-row>
+            <el-col :span="20">
+                <el-form :model="helpPages" label-width="100px" size="large" height="auto">
+                    <el-text class="mx-1" size="large" tag="b">帖子标题：</el-text>
+                    <el-text class="mx-1" size="large" tag="b" v-text="helpPages.title"></el-text>
+                    <br/><br/>
+                    <el-row>
+                        <el-col :span="1">
+                            <el-avatar :src= "helpPages.userPic ? helpPages.userPic:avatar" />
+                        </el-col>
+                        <el-col :span="3">
+                            <!-- <br/> -->
+                            <el-text class="mx-1" >楼主：</el-text>
+                            <el-text class="mx-1" v-text="helpPages.name"></el-text>
+                        </el-col>
+                        <el-col :span="5">
+                            <!-- <br/> -->
+                            <el-text class="mx-1" >创建时间：</el-text>
+                            <el-text class="mx-1" v-text="helpPages.createTime"></el-text>
+                        </el-col>
+                        <el-col :span="5">
+                            <!-- <br/> -->
+                            <el-text class="mx-1" >更新时间：</el-text>
+                            <el-text class="mx-1" v-text="helpPages.updateTime"></el-text>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-text class="mx-1" >分类：</el-text>
+                            <el-text class="mx-1" v-text="helpPages.typeName"></el-text>
+                        </el-col>
+                    </el-row>
+                    
+                    <br/><br/>
+                    <el-row>
+                        <!-- 放置图片 -->
+                        <el-col :span="11">
+                            <div class="demo-image__lazy">
+                                <el-image  :key="helpPages.image" :src="helpPages.image" lazy />
+                            </div>
+                            
 
-    <el-row>
-        <el-col :span="20">
-            <el-form :model="helpPages" label-width="100px" size="large" height="auto">
-                <el-text class="mx-1" size="large" tag="b">帖子标题：</el-text>
-                <el-text class="mx-1" size="large" tag="b" v-text="helpPages.title"></el-text>
-                <br/><br/>
-                <el-row>
-                    <el-col :span="1">
-                        <el-avatar :src= "helpPages.userPic ? helpPages.userPic:avatar" />
-                    </el-col>
-                    <el-col :span="3">
-                        <!-- <br/> -->
-                        <el-text class="mx-1" >楼主：</el-text>
-                        <el-text class="mx-1" v-text="helpPages.username"></el-text>
-                    </el-col>
-                    <el-col :span="5">
-                        <!-- <br/> -->
-                        <el-text class="mx-1" >创建时间：</el-text>
-                        <el-text class="mx-1" v-text="helpPages.createTime"></el-text>
-                    </el-col>
-                    <el-col :span="5">
-                        <!-- <br/> -->
-                        <el-text class="mx-1" >更新时间：</el-text>
-                        <el-text class="mx-1" v-text="helpPages.updateTime"></el-text>
-                    </el-col>
-                </el-row>
-                
-                <br/><br/>
-                <el-row>
-                    <!-- 放置图片 -->
-                    <el-col :span="11">
-                        <div class="demo-image__lazy">
-                            <el-image  :key="helpPages.image" :src="helpPages.image" lazy />
-                        </div>
-                        
+
+                        </el-col>
+                        <el-col :span="1">  </el-col>
+                        <el-col :span="12">
+                                <el-text class="mx-1" v-text="helpPages.content"></el-text>    
+                                <br/><br/><br/><br/><br/><br/>
+
+                                <el-text class="mx-1">联系方式📞：</el-text>
+                                <el-text class="mx-1" v-text="helpPages.phone"></el-text>
+
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-col>
+        </el-row>    
+    </div>
 
 
-                    </el-col>
-                    <el-col :span="1">  </el-col>
-                    <el-col :span="12">
-                            <el-text class="mx-1" v-text="helpPages.content"></el-text>    
-                            <br/><br/><br/><br/><br/><br/>
 
-                            <el-text class="mx-1">联系方式📞：</el-text>
-                            <el-text class="mx-1" v-text="helpPages.phone"></el-text>
-
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-col>
-    </el-row>
     <br/><br/><br/>
     
     <el-card class="page-container">
@@ -199,7 +204,7 @@ const cancelreply = () =>{
             <div class="header">
                 <span>回帖详情</span>
                 <div class="extra">
-                    <el-button :icon="ChatRound"   type="primary" @click="visibleDrawer=true">发表留言</el-button>
+                    <el-button :icon="ChatRound" type="primary" @click="visibleDrawer=true">发表留言</el-button>
                 </div>
             </div>
         </template>
@@ -210,7 +215,8 @@ const cancelreply = () =>{
                 <template #header>
                     <div class="header2">
                         <el-avatar :src="item.userPic ? item.userPic : avatar" />
-                        <el-text class="mx-1" v-text="item.username"></el-text>
+                        <div style="margin-right:10px"></div>
+                        <el-text class="mx-1" v-text="item.name"></el-text>
                         <el-text class="mx-1" style = "text-indent:20px" v-text="item.replyTime"></el-text>
                         <el-text class="mx-1" style = "text-indent:20px;margin-right: 20px;" ></el-text>
                         <span></span>
@@ -221,6 +227,7 @@ const cancelreply = () =>{
                 <el-text class="mx-1" v-text="item.content" style = "text-indent:20px;"></el-text>
 
             </el-card>
+            <br/>
         </div>
         
         <el-drawer v-model="visibleDrawer" title="输入留言" direction="btt" size="40%">
@@ -271,6 +278,7 @@ const cancelreply = () =>{
 .page-container {
     min-height: 100%;
     box-sizing: border-box;
+    background-color: #fffbff;
 
     .header {
         display: flex;
@@ -282,6 +290,7 @@ const cancelreply = () =>{
 .page-container2 {
     min-height: 100%;
     box-sizing: border-box;
+    background-color: #f8ebea;
 
     .header2 {
         display: flex;
@@ -329,7 +338,13 @@ const cancelreply = () =>{
 }
 
 
-
+//边框样式
+.border-container {
+  border: 1px solid #e4e7ed;    /* 设置边框颜色和宽度 */
+  box-sizing: border-box;    /* 边框宽度不占用内部空间 */
+  padding: 20px;             /* 设置内边距，如果需要 */
+  /* 可以根据需要设置其他样式 */
+}
 
 
 

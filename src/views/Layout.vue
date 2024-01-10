@@ -75,7 +75,7 @@ const handleCommand = (command) => {
         <el-aside width="250px">
             <div class="el-aside__logo"></div>
             <el-menu active-text-color="#ffd04b" background-color="#232323" text-color="#fff" router>
-                <el-sub-menu v-show="userInfoStore.info.role==0">
+                <el-sub-menu v-show="userInfoStore.info.role==0" index="1">
                     <template #title>
                         <el-icon>
                             <Management />
@@ -103,7 +103,7 @@ const handleCommand = (command) => {
                     <span>👨SHUer友广场👩</span>
                 </el-menu-item>
 
-                <el-sub-menu>
+                <el-sub-menu index="2">
                     <template #title>
                         <el-icon>
                             <UserFilled />
@@ -169,7 +169,7 @@ const handleCommand = (command) => {
                 <router-view></router-view>
             </el-main>
             <!-- 底部区域 -->
-            <el-footer>校园轻舍 ©2023 Created by elegance-modernization</el-footer>
+            <el-footer>校园轻舍 ©2023 Created by Elegance-Modernization</el-footer>
         </el-container>
     </el-container>
 </template>

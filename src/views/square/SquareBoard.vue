@@ -10,6 +10,11 @@ import { ref } from 'vue'
 import {useTokenStore} from '@/stores/token.js'
 const tokenStore = useTokenStore();
 
+import useUserInfoStore from '@/stores/userInfo.js'
+const userInfoStore = useUserInfoStore();
+const userInfo = ref({...userInfoStore.info})
+
+
 //文章分类数据模型
 const categorys = ref([
     {
@@ -28,16 +33,16 @@ const state=ref('')
 //文章列表数据模型
 const helpPages = ref([
     {
-        "id": 1,
-        "username":"Wang",
-        "name":"小王",
-        "phone":"17366538888",
-        "title": "陕西旅游攻略",
-        "content": "兵马俑,华清池,法门寺,华山...爱去哪去哪...",
-        "image":"1.jpg",
-        "typeId":3,
-        "createTime": "2023-09-03 11:55:30",
-        "updateTime": "2023-09-03 11:55:30"
+        "id": '',
+        "username":'',
+        "name":'',
+        "phone":'',
+        "title": '',
+        "content": '',
+        "image":'',
+        "typeId":'',
+        "createTime": '',
+        "updateTime": ''
     }
 ])
 
@@ -57,7 +62,6 @@ const onCurrentChange = (num) => {
     helpPagePageList();
 }
 
-
 //回显帖子类别
 import {typePageListService} from '@/api/square.js'
 const typePageList = async()=>{
@@ -66,9 +70,6 @@ const typePageList = async()=>{
     categorys.value = result.data;
 }
 typePageList();
-
-
-
 
 //回显帖子
 import {helpPageListService} from '@/api/square.js'
@@ -79,19 +80,33 @@ const helpPageList = async()=>{
 }
 //helpPageList()
 
+//日期选择器的vue对象
+const searchDateRange = ref('');
+
+
+//控制表单加载的动画
+const loading = ref(true)
+
 //page方式回显帖子
+import {echoUserAvatorService} from '@/api/square.js'
 import {helpPagePageListService} from '@/api/square.js'
 const helpPagePageList = async()=>{
+    loading.value = true;
+    //获取查询日期区间
+    let leftdate = searchDateRange.value[0];
+    let rightdate = searchDateRange.value[1];
+
     let params = {
         page:pageNum.value,
         pageSize:pageSize.value,
         typeId:categoryId.value ? categoryId.value: null,
+        begin:leftdate,
+        end:rightdate
     }
     let result = await helpPagePageListService(params);
     total.value = result.data.total;
     helpPages.value = result.data.rows;
     console.log(result.data.rows);
-
 
     //设置helppage的typename字段
     for(let i=0;i<helpPages.value.length;i++){
@@ -102,10 +117,24 @@ const helpPagePageList = async()=>{
             }
         }
     }
+
+    //设置helppage的createTime和updateTime字段
+    for(let i=0;i<helpPages.value.length;i++){
+        let page = helpPages.value[i];
+        page.createTime = page.createTime.replaceAll('T',' ');
+        page.updateTime = page.updateTime.replaceAll('T',' ');
+    }
+
+    //设置helppage的userPic字段
+    for(let i=0;i<helpPages.value.length;i++){
+        let page = helpPages.value[i];
+        let result = await echoUserAvatorService(page.username);
+        page.userPic = result.data.userPic;
+    }
+
+    loading.value = false;
 }
 helpPagePageList();
-
-
 
 import {Plus} from '@element-plus/icons-vue'
 //控制抽屉是否显示
@@ -146,11 +175,14 @@ const edit_uploadSuccess = (result)=>{
     console.log(result.data);
 }
 
-
 //添加帖子
 import { ElMessage } from 'element-plus';
 import {helpPageAddService} from '@/api/square.js'
 const helpPageAdd = async()=>{
+    //与userInfo这个vue对象绑定
+    articleModel.value.name = userInfo.value.nickname;
+    articleModel.value.username = userInfo.value.username;
+    
     //调用接口
     let result = await helpPageAddService(articleModel.value);
     ElMessage.success(result.code===1?'发帖成功⭐':'发帖失败');
@@ -163,6 +195,7 @@ const helpPageAdd = async()=>{
 
     //刷新当前帖子列表
     helpPagePageList();
+
 }
 
 
@@ -176,7 +209,20 @@ import {gethelpPageByIdService} from '@/api/square.js'
 const getHelpPageId = async(param)=>{
     console.log(param);
     let result = await gethelpPageByIdService(param);
+
+    result.data.createTime = result.data.createTime.replaceAll('T',' ');
+    result.data.updateTime = result.data.updateTime.replaceAll('T',' ');
+
     let data = result.data;
+
+    //设置data的typename字段
+    for(let i=0;i<categorys.value.length;i++){
+        if(data.typeId==categorys.value[i].id){
+            data.typeName = categorys.value[i].typename;
+        }
+    }
+
+
     console.log(data);
     HelpPageStore.removeInfo();
     HelpPageStore.setInfo(data);
@@ -195,7 +241,6 @@ const echoHelpPage = ref({
     "createTime": '',
     "updateTime": ''
 })
-
 
 import {editHelpPageByIdService} from '@/api/square.js'
 //回显互助帖
@@ -220,12 +265,16 @@ import {deleteHelpPageByIdService} from '@/api/square.js'
 //删除指定的互助帖
 const deleteHelpPageById = async (id)=>{
     let result = await deleteHelpPageByIdService(id);
-    ElMessage.success(result.code===1?'修改成功⭐':'修改出错');
+    ElMessage.success(result.code===1?'删除成功⭐':'修改出错');
     dialogVisible.value = false;
     //重新加载分页数据
     helpPagePageList();
 }
 
+//路由跳转到我的帖子
+const gotoMyPage = ()=>{
+    router.push('/square/mypage');
+}
 
 
 </script>
@@ -237,12 +286,12 @@ const deleteHelpPageById = async (id)=>{
                 <span>🔥SHUer友热帖🔥</span>
                 <div class="extra">
                     <el-button type="primary" @click="visibleDrawer=true">发布帖子</el-button>
-                    <el-button type="primary" @click="">管理帖子</el-button>
+                    <el-button type="primary" @click="gotoMyPage">我的帖子</el-button>
                 </div>
             </div>
         </template>
         <!-- 搜索表单 -->
-        <el-form inline>
+        <el-form :inline="true" >
             <el-form-item label="帖子分类：" style="width: 230px;">
                 <el-select placeholder="请选择" v-model="categoryId">
                     <el-option 
@@ -254,22 +303,40 @@ const deleteHelpPageById = async (id)=>{
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="发布状态：">
+            <!-- <el-form-item label="发布状态：">
                 <el-select placeholder="请选择" v-model="state">
                     <el-option label="已发布" value="已发布"></el-option>
                     <el-option label="草稿" value="草稿"></el-option>
                 </el-select>
+            </el-form-item> -->
+            
+            <el-form-item label="发布时间">
+                <el-date-picker
+                    v-model="searchDateRange"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="YYYY-MM-DD">
+                </el-date-picker>
             </el-form-item>
+
             <el-form-item>
                 <el-button type="primary" @click = "helpPagePageList">搜索</el-button>
-                <el-button @click="categoryId=''">重置</el-button>
+                <el-button @click="categoryId='';searchDateRange=''">重置</el-button>
             </el-form-item>
         </el-form>
-        <!-- 文章列表 -->
-        <el-table :data="helpPages" style="width: 100% " >
+        <!-- 帖子列表 -->
+        <el-table :data="helpPages" style="width: 100%" v-loading="loading" >
 
             <el-table-column label="帖子标题" width="400" prop="title"></el-table-column>
             <el-table-column label="分类" width="100" prop="typeName"></el-table-column>
+
+            <el-table-column width="70">
+                <template #default="{ row }">
+                    <el-avatar :src= "row.userPic ? row.userPic:avatar" />
+                </template>
+            </el-table-column>
             <el-table-column label="楼主" width="150" prop="name"></el-table-column>
             <el-table-column label="正文" prop="content"></el-table-column>
             <el-table-column label="发表时间" width="200" prop="createTime"> </el-table-column>
@@ -279,11 +346,9 @@ const deleteHelpPageById = async (id)=>{
                     <el-button :icon="Delete" circle plain type="danger"></el-button> -->
                     <!-- 查看详情页的组件 -->
                     <el-button :icon="View" circle plain type="primary" @click="getHelpPageId(row.id)"></el-button>
-                    <el-button :icon="Edit" circle plain type="info" @click="echoHelpPageById(row.id)"></el-button>
+                    <el-button :icon="Edit" circle plain type="info" @click="echoHelpPageById(row.id)" v-show="userInfoStore.info.role==0"></el-button>
                 </template>
             </el-table-column>
-            
-
             
             <template #empty>
                 <el-empty description="没有数据" />
@@ -298,7 +363,7 @@ const deleteHelpPageById = async (id)=>{
     </el-card>
 
     <!-- 抽屉 -->
-    <el-drawer v-model="visibleDrawer" title="发布帖子📕" direction="rtl" size="50%">
+    <el-drawer v-model="visibleDrawer" title="发布帖子📕" direction="rtl" size="40%" style="background-color: #fef7ff;">
         <!-- 发布帖子表单 -->
         <el-form :model="articleModel" label-width="100px" >
             <el-form-item label="帖子标题" style = "width:60%">
@@ -343,18 +408,6 @@ const deleteHelpPageById = async (id)=>{
                 <el-col span="12">
                     <el-form-item label="联系方式📞" >
                         <el-input v-model="articleModel.phone" placeholder="请输入手机号码"></el-input>
-                    </el-form-item>
-                </el-col>
-
-                <el-col span="12">
-                    <el-form-item label="您的昵称" >
-                        <el-input v-model="articleModel.name" placeholder="请输入昵称"></el-input>
-                    </el-form-item>
-                </el-col>
-
-                <el-col span="12">
-                    <el-form-item label="您的账号名" >
-                        <el-input v-model="articleModel.username" placeholder="请输入账号名"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -428,10 +481,6 @@ const deleteHelpPageById = async (id)=>{
 
         </el-form>
 
-
-
-        
-        
         <template #footer>
         <span class="dialog-footer">
             <el-button type="primary" @click="editHelpPageById">确认修改</el-button>
@@ -463,8 +512,8 @@ const deleteHelpPageById = async (id)=>{
 .avatar-uploader {
     :deep() {
         .avatar {
-            width: 300px;
-            height: 250px;
+            width: 500px;
+            height: 350px;
             display: block;
         }
 
@@ -499,6 +548,29 @@ const deleteHelpPageById = async (id)=>{
 
 .dialog-footer button:first-child {
   margin-right: 10px;
+}
+
+// 日期选择器的样式
+.demo-date-picker {
+  display: flex;
+  width: 60%;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.demo-date-picker .block {
+  padding: 30px 0;
+  text-align: center;
+  border-right: solid 1px var(--el-border-color);
+  flex: 1;
+}
+.demo-date-picker .block:last-child {
+  border-right: none;
+}
+.demo-date-picker .demonstration {
+  display: block;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
 

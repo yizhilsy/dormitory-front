@@ -12,6 +12,7 @@ import UserInfoVue from '@/views/user/UserInfo.vue'
 import UserResetPasswordVue from '@/views/user/UserResetPassword.vue'
 import SquareBoardVue from '@/views/square/SquareBoard.vue'
 import pageInfoVue from '@/views/page/pageInfo.vue'
+import mypage from '@/views/square/mypage.vue'
 
 
 
@@ -26,7 +27,8 @@ const routes = [
         {path:'/user/avatar',component:UserAvatarVue},
         {path:'/user/resetPassword',component:UserResetPasswordVue},
         {path:'/square',component:SquareBoardVue},
-        {path:'/square/pageInfo',component:pageInfoVue}
+        {path:'/square/pageInfo',component:pageInfoVue},
+        {path:'/square/mypage',component:mypage}
     ]}
 ]
 
