@@ -107,7 +107,7 @@ const colors = ref([
       'gray'
 ]);
 console.log("^^^^^^^^^^^^^^^^^");
-console.log(colors.value);
+console.log(colors);
 
 // 文章列表数据模型
 const helpPages = ref([
