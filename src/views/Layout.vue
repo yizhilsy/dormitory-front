@@ -80,13 +80,67 @@ const handleCommand = (command) => {
 }
 
 // 同步侧栏和顶部导航栏的vue对象
-const currentMenuItem = ref('/square');
+const currentMenuItem = ref('/welcome');
 
 const onClickMenuItem = (key) => {
     Message.info({ content: `You select ${key}`, showIcon: true });
     currentMenuItem.value = key;
     console.log("**********************");
     router.push(key);
+}
+
+// 帖子数据模型
+const helpPages = ref([
+    {
+        "id": ' ',
+        "username":' ',
+        "name":' ',
+        "phone":' ',
+        "title": ' ',
+        "content": ' ',
+        "image":' ',
+        "typeId":' ',
+        "createTime": ' ',
+        "updateTime": ' '
+    }
+])
+
+
+
+let result = {
+    flag:false,
+}
+let result2 = {
+    flag:true,
+}
+console.log("initinitinit");
+console.log(result);
+
+
+import {usebitFlowFlagStore} from '@/stores/bitFlowFlag.js'
+const bitFlowFlagStore = usebitFlowFlagStore();
+bitFlowFlagStore.removeInfo();
+bitFlowFlagStore.setInfo(result);
+const bitFlowFlag = ref({
+    ...bitFlowFlagStore.bitFlowFlagInfo
+})
+// 字节浪潮bitflow分页查询滚动条部分 createby @shiyulu
+// 监听滚动条
+const handleScroll = (e) => {
+  const {scrollTop, clientHeight, scrollHeight} = e.target
+  // console.log(scrollTop, clientHeight, scrollHeight)
+  if (scrollTop + clientHeight === scrollHeight){
+    console.log("reach the bottom!");
+    // alert("reach the bottom!");
+    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    bitFlowFlagStore.removeInfo();
+    bitFlowFlagStore.setInfo(result2);
+    console.log(bitFlowFlagStore.bitFlowFlagInfo.flag);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+  }else{
+    bitFlowFlagStore.setInfo(result);
+    console.log(bitFlowFlag.value.flag);
+  }
 }
 
 </script>
@@ -101,13 +155,13 @@ const onClickMenuItem = (key) => {
         <a-layout-sider collapsible breakpoint="xl" width="250px">
             <div class="logo" />
             <a-menu
-            :default-open-keys="['/square']"
-            :default-selected-keys="['/square']"
+            :default-open-keys="['/welcome']"
+            :default-selected-keys="['/welcome']"
             :selected-keys="[currentMenuItem]"
             :style="{ width: '100%' }"
             @menu-item-click="onClickMenuItem"
             >
-            <a-menu-item key="/square">
+            <a-menu-item key="/welcome">
                 <icon-lark-color />👨SHUer友广场👩
             </a-menu-item>
 
@@ -126,15 +180,18 @@ const onClickMenuItem = (key) => {
                 </a-menu-item>
             </a-sub-menu>
 
-            <a-sub-menu key="userManage">
+            <a-sub-menu key="Manage">
                 <template #title>
-                    <icon-command /> 用户管理
+                    <icon-command /> 管理菜单
                 </template>
                 <a-menu-item key="/manage/addUser">
                     <icon-plus />添加用户
                 </a-menu-item>
                 <a-menu-item key="/manage/resetUserPwd">
                     <icon-refresh />重置用户密码
+                </a-menu-item>
+                <a-menu-item key="/square">
+                    <icon-tool />SHUer帖管理
                 </a-menu-item>
             </a-sub-menu>
             </a-menu>
@@ -155,8 +212,8 @@ const onClickMenuItem = (key) => {
                 <div class="menu-demo">
                     <a-menu 
                         mode="horizontal" theme="light" 
-                        :default-open-keys="['/square']"
-                        :default-selected-keys="['/square']"
+                        :default-open-keys="['/welcome']"
+                        :default-selected-keys="['/welcome']"
                         :selected-keys="[currentMenuItem]"
                         :style="{ width: '100%' }"
                         @menu-item-click="onClickMenuItem"
@@ -173,7 +230,7 @@ const onClickMenuItem = (key) => {
                         </a-space>
                         
                     </a-menu-item>
-                    <a-menu-item key="/square">
+                    <a-menu-item key="/welcome">
                         <icon-lark-color />👨SHUer友广场👩
                     </a-menu-item>
 
@@ -192,15 +249,18 @@ const onClickMenuItem = (key) => {
                         </a-menu-item>
                     </a-sub-menu>
 
-                    <a-sub-menu key="userManage">
+                    <a-sub-menu key="Manage">
                         <template #title>
-                            <icon-command /> 用户管理
+                            <icon-command /> 管理菜单
                         </template>
                         <a-menu-item key="/manage/addUser">
                             <icon-plus />添加用户
                         </a-menu-item>
                         <a-menu-item key="/manage/resetUserPwd">
                             <icon-refresh />重置用户密码
+                        </a-menu-item>
+                        <a-menu-item key="/square">
+                            <icon-tool />SHUer帖管理
                         </a-menu-item>
                     </a-sub-menu>
                     </a-menu>
@@ -236,7 +296,8 @@ const onClickMenuItem = (key) => {
 
 
             <!-- 中间区域 -->
-            <el-main style="width: 82%;margin: 0 auto;">
+            <el-main style="width: 82%;margin: 0 auto;" @scroll="handleScroll">
+                <a-back-top target-container="#basic-demo" :style="{position:'absolute'}" />
                 <!-- <div style="width: 1290px; height: 570px;border: 1px solid red;">
                     内容展示区
                 </div> -->

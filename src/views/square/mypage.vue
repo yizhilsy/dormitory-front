@@ -80,7 +80,7 @@ const echoMyPage = async()=>{
 echoMyPage();
 
 const backsquare = ()=>{
-    router.push('/square');
+    router.push('/welcome');
 }
 
 //保存回显指定id号的帖子的vue对象

@@ -77,7 +77,7 @@ const urls = [
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const backsquare = ()=>{
-    router.push('/square');
+    router.push('/welcome');
 }
 
 const url =
@@ -121,14 +121,21 @@ const cancelreply = () =>{
     visibleDrawer.value = false;
 }
 
-// //滑动滚动条自动监听
-// const checkScroll = (event) => {
-//       const { scrollTop, clientHeight, scrollHeight } = event.target;
-//       if (scrollHeight - scrollTop - clientHeight < clientHeight * 0.1) {
-//         console.log("1111");
-//       }
-// };
-
+// 文章分类标签的颜色
+const colors = ref([
+      'orangered',
+      'orange',
+      'gold',
+      'lime',
+      'green',
+      'cyan',
+      'blue',
+      'arcoblue',
+      'purple',
+      'pinkpurple',
+      'magenta',
+      'gray'
+]);
 
 </script>
 
@@ -137,7 +144,11 @@ const cancelreply = () =>{
 <el-card class="page-container">
     <template #header>
         <div class="header">
-            <span>帖子详情</span>
+            <a-typography-title :style="{ margin: 0, fontSize: '16px'}" :heading="5">
+                帖子详情
+            </a-typography-title>
+
+
             <div class="extra">
                 <el-button type="primary" @click="backsquare">返回广场</el-button>
             </div>
@@ -150,6 +161,7 @@ const cancelreply = () =>{
                 <el-form :model="helpPages" label-width="100px" size="large" height="auto">
                     <el-text class="mx-1" size="large" tag="b">帖子标题：</el-text>
                     <el-text class="mx-1" size="large" tag="b" v-text="helpPages.title"></el-text>
+                    <a-tag bordered style="margin-left: 30px;font-size:medium;vertical-align: bottom;" :color="colors[helpPages.typeId]">{{helpPages.typeName}}</a-tag>
                     <br/><br/>
                     <el-row>
                         <el-col :span="1">
@@ -169,10 +181,6 @@ const cancelreply = () =>{
                             <!-- <br/> -->
                             <el-text class="mx-1" >更新时间：</el-text>
                             <el-text class="mx-1" v-text="helpPages.updateTime"></el-text>
-                        </el-col>
-                        <el-col :span="4">
-                            <el-text class="mx-1" >分类：</el-text>
-                            <el-text class="mx-1" v-text="helpPages.typeName"></el-text>
                         </el-col>
                     </el-row>
                     
@@ -353,7 +361,22 @@ const cancelreply = () =>{
   /* 可以根据需要设置其他样式 */
 }
 
+// 圆角滑动条样式
+::-webkit-scrollbar {
+width: 12px;
+height: 4px;
+}
 
+::-webkit-scrollbar-thumb {
+border: 4px solid transparent;
+background-clip: padding-box;
+border-radius: 10px;
+background-color: var(--color-text-4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+background-color: var(--color-text-3);
+}
 
 </style>
 

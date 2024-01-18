@@ -293,10 +293,11 @@ const gotoMyPage = ()=>{
     <el-card class="page-container">
         <template #header>
             <div class="header">
-                <span>🔥SHUer友热帖🔥</span>
+                
+                <span style="font-size: 15px;"><icon-settings size="20px"/> 管理SHUer友热帖</span>
                 <div class="extra">
-                    <el-button type="primary" @click="visibleDrawer=true">发布帖子</el-button>
-                    <el-button type="primary" @click="gotoMyPage">我的帖子</el-button>
+                    <!-- <el-button type="primary" @click="visibleDrawer=true">发布帖子</el-button> -->
+                    <!-- <el-button type="primary" @click="gotoMyPage">我的帖子</el-button> -->
                 </div>
             </div>
         </template>
