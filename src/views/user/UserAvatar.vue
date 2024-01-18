@@ -46,7 +46,7 @@ const updateAvatar = async()=>{
                     class="avatar-uploader" 
                     :show-file-list="false"
                     :auto-upload="true"
-                    action="/api/upload"
+                    action="https://47.115.229.197:8445/upload"
                     name="image"
                     :headers="{'Authorization':tokenStore.token}"
                     :on-success="uploadSuccess"

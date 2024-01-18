@@ -5,6 +5,17 @@ import {
     View,
 } from '@element-plus/icons-vue'
 
+import { defineComponent } from 'vue';
+  import { Message} from '@arco-design/web-vue';
+  import {
+    IconCaretRight,
+    IconCaretLeft,
+    IconHome,
+    IconCalendar,
+  } from '@arco-design/web-vue/es/icon';
+
+
+
 import { ref } from 'vue'
 
 import {useTokenStore} from '@/stores/token.js'
@@ -22,7 +33,6 @@ const categorys = ref([
         "typename": "求助",
     }
 ])
-
 
 //用户搜索时选中的分类id
 const categoryId=ref('')
@@ -379,7 +389,7 @@ const gotoMyPage = ()=>{
                 <!-- auto-upload -->
 
                 <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                    action="/api/upload"
+                    action="https://47.115.229.197:8445/upload"
                     name="image"
                     :on-success="uploadSuccess"
                     :headers="{'Authorization':tokenStore.token}"
@@ -448,7 +458,7 @@ const gotoMyPage = ()=>{
             <el-form-item label="帖子图片">
                 <!-- auto-upload -->
                 <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                    action="/api/upload"
+                    action="https://47.115.229.197:8445/upload"
                     name="image"
                     :on-success="edit_uploadSuccess"
                     :headers="{'Authorization':tokenStore.token}"
@@ -478,7 +488,6 @@ const gotoMyPage = ()=>{
                 <el-input v-model="echoHelpPage.phone" placeholder="请输入标题"></el-input>
             </el-form-item>
             
-
         </el-form>
 
         <template #footer>
@@ -491,10 +500,7 @@ const gotoMyPage = ()=>{
 
     </el-dialog>
 
-    
 </template>
-
-
 
 <style lang="scss" scoped>
 .page-container {

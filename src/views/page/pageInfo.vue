@@ -121,6 +121,13 @@ const cancelreply = () =>{
     visibleDrawer.value = false;
 }
 
+// //滑动滚动条自动监听
+// const checkScroll = (event) => {
+//       const { scrollTop, clientHeight, scrollHeight } = event.target;
+//       if (scrollHeight - scrollTop - clientHeight < clientHeight * 0.1) {
+//         console.log("1111");
+//       }
+// };
 
 
 </script>
@@ -153,12 +160,12 @@ const cancelreply = () =>{
                             <el-text class="mx-1" >楼主：</el-text>
                             <el-text class="mx-1" v-text="helpPages.name"></el-text>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <!-- <br/> -->
                             <el-text class="mx-1" >创建时间：</el-text>
                             <el-text class="mx-1" v-text="helpPages.createTime"></el-text>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <!-- <br/> -->
                             <el-text class="mx-1" >更新时间：</el-text>
                             <el-text class="mx-1" v-text="helpPages.updateTime"></el-text>

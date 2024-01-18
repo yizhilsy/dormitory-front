@@ -213,7 +213,7 @@ const reConfirm = (param) => {
             <el-form-item label="帖子图片">
                 <!-- auto-upload -->
                 <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                    action="/api/upload"
+                    action="https://47.115.229.197:8445/upload"
                     name="image"
                     :on-success="edit_uploadSuccess"
                     :headers="{'Authorization':tokenStore.token}"

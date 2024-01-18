@@ -14,13 +14,13 @@ export default defineConfig({
     }
   },
   //跨域
-  server:{
-    proxy:{
-      '/api':{//获取路径中包含了/api的请求
-        target:'http://localhost:8080',//后台服务所在的源
-        changeOrigin:true,//修改源
-        rewrite:(path)=>path.replace(/^\/api/,'')//'/api'替换为''
-     }
-    }
-  }
+  // server:{
+  //   proxy:{
+  //     '/api':{//获取路径中包含了/api的请求
+  //       target:'http://localhost:8080',//后台服务所在的源
+  //       changeOrigin:true,//修改源
+  //       rewrite:(path)=>path.replace(/^\/api/,'')//'/api'替换为''
+  //    }
+  //   }
+  // }
 })
