@@ -86,6 +86,9 @@ export const hotest5Service = () => {
     return request.get('/square/hotest5');
 }
 
-
+// 调用后端回显当前用户喜欢的帖子
+export const myLikePageService = (params,uid) => {
+    return request.get('/square/mylike'+'/'+uid,{params:params});
+}
 
 

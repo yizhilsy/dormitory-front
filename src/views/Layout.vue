@@ -16,10 +16,9 @@ import { defineComponent } from 'vue';
     IconCaretLeft,
     IconHome,
     IconCalendar,
-    
   } from '@arco-design/web-vue/es/icon';
 import avatar from '@/assets/default.png'
-
+import { ElNotification } from 'element-plus'
 import { ref } from 'vue';
 
 import { userInfoService } from '@/api/user.js';
@@ -58,9 +57,9 @@ const handleCommand = (command) => {
         ).then(async () => {
             //退出登录
             //1.清空pinia中存储的token以及个人信息
+            let result = await userLogoutService();
             tokenStore.removeToken();
             userInfoStore.removeInfo();
-            let result = userLogoutService();
             //2.跳转到登录页面
             router.push('/login')
             ElMessage({
@@ -83,7 +82,27 @@ const handleCommand = (command) => {
 const currentMenuItem = ref('/welcome');
 
 const onClickMenuItem = (key) => {
-    Message.info({ content: `You select ${key}`, showIcon: true });
+    if(key=="github"){
+        window.open('https://github.com/yizhilsy', '_blank');
+        return;
+    }
+    if(key=="wechatpay"||key=="alipay"){
+        ElNotification({
+            title: '施工中',
+            message: '即将上线 @Elegance-Modernization',
+            type: 'info',
+        })
+        return;
+    }
+    if (key == "logokey"){
+        ElNotification({
+            title: '开发者信息',
+            message: '陆诗雨，陈楠，王志伟，张泽毅 团队@Elegance-Modernization',
+            type: 'info',
+        })
+        return;
+    }
+    // Message.info({ content: `You select ${key}`, showIcon: true });
     currentMenuItem.value = key;
     console.log("**********************");
     router.push(key);
@@ -153,7 +172,7 @@ const handleScroll = (e) => {
             
         </el-aside> -->
         <a-layout-sider collapsible breakpoint="xl" width="250px">
-            <div class="logo" />
+            <div class="logo"></div>
             <a-menu
             :default-open-keys="['/welcome']"
             :default-selected-keys="['/welcome']"
@@ -172,9 +191,6 @@ const handleScroll = (e) => {
                 <a-menu-item key="/user/info">
                     <icon-file />基本资料
                 </a-menu-item>
-                <a-menu-item key="/user/avatar">
-                    <icon-file-image />更换头像
-                </a-menu-item>
                 <a-menu-item key="/user/resetPassword">
                     <icon-edit />修改密码
                 </a-menu-item>
@@ -184,17 +200,43 @@ const handleScroll = (e) => {
                 <template #title>
                     <icon-command /> 管理菜单
                 </template>
-                <a-menu-item key="/manage/addUser">
-                    <icon-plus />添加用户
-                </a-menu-item>
-                <a-menu-item key="/manage/resetUserPwd">
-                    <icon-refresh />重置用户密码
+                <a-menu-item key="/manage/usermanage">
+                    <icon-user-add />管理用户
                 </a-menu-item>
                 <a-menu-item key="/square">
                     <icon-tool />SHUer帖管理
                 </a-menu-item>
             </a-sub-menu>
+            <a-menu-item key="yourroute">
+                <icon-find-replace />宿舍查寝
+            </a-menu-item>
+            <a-menu-item key="yourroute">
+                <icon-bg-colors />云端订水
+            </a-menu-item>
+
+            <a-menu-item key="github">
+                <template #icon>
+                    <icon-github/>
+                </template>
+                Github
+            </a-menu-item>
+
+            <a-menu-item key="wechatpay">
+                <template #icon>
+                    <icon-wechatpay />
+                </template>
+                微信支付
+            </a-menu-item>
+
+            <a-menu-item key="alipay">
+                <template #icon>
+                    <icon-alipay-circle />
+                </template>
+                支付宝
+            </a-menu-item>
+
             </a-menu>
+            
             <!-- trigger -->
             <template #trigger="{ collapsed }">
                 <IconCaretRight v-if="collapsed"></IconCaretRight>
@@ -218,7 +260,7 @@ const handleScroll = (e) => {
                         :style="{ width: '100%' }"
                         @menu-item-click="onClickMenuItem"
                     >
-                    <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }">
+                    <a-menu-item key="logokey" :style="{ padding: 0, marginRight: '38px' }" >
                         <!-- <div :style="{width: '60px',height: '40px',cursor: 'text',color: '#1d2129'}">
                             <span>111</span>
                         </div> -->
@@ -241,9 +283,6 @@ const handleScroll = (e) => {
                         <a-menu-item key="/user/info">
                             <icon-file />基本资料
                         </a-menu-item>
-                        <a-menu-item key="/user/avatar">
-                            <icon-file-image />更换头像
-                        </a-menu-item>
                         <a-menu-item key="/user/resetPassword">
                             <icon-edit />修改密码
                         </a-menu-item>
@@ -253,16 +292,19 @@ const handleScroll = (e) => {
                         <template #title>
                             <icon-command /> 管理菜单
                         </template>
-                        <a-menu-item key="/manage/addUser">
-                            <icon-plus />添加用户
-                        </a-menu-item>
-                        <a-menu-item key="/manage/resetUserPwd">
-                            <icon-refresh />重置用户密码
+                        <a-menu-item key="/manage/usermanage">
+                            <icon-user-add />用户管理
                         </a-menu-item>
                         <a-menu-item key="/square">
                             <icon-tool />SHUer帖管理
                         </a-menu-item>
                     </a-sub-menu>
+                    <a-menu-item key="yourroute">
+                        <icon-find-replace />宿舍查寝
+                    </a-menu-item>
+                    <a-menu-item key="yourroute">
+                        <icon-bg-colors />云端订水
+                    </a-menu-item>
                     </a-menu>
                 </div>
 
@@ -305,13 +347,11 @@ const handleScroll = (e) => {
             </el-main>
             <!-- 底部区域 -->
             <el-footer>
-                Dorm Life 校园轻舍 ©2024 Created by Elegance-Modernization
-                <a-tag color="gray">
-                    <template #icon>
-                        <icon-github/>
-                    </template>
-                    Github
-                </a-tag>
+                Dorm Life 生活轻舍 ©2024 Created by Elegance-Modernization
+                <a-tag color="gray"><template #icon><icon-github/></template>Github</a-tag>
+                <a-tag color="blue"><template #icon><icon-twitter/></template>Twitter</a-tag>
+                <a-tag color="arcoblue"><template #icon><icon-facebook/></template>Facebook</a-tag>
+                <a-tag color="gray"><template #icon><icon-google /></template>Google</a-tag>
             </el-footer>
         </el-container>
     </el-container>

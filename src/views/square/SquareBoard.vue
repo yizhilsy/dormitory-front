@@ -333,8 +333,8 @@ const gotoMyPage = ()=>{
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click = "helpPagePageList">搜索</el-button>
-                <el-button @click="categoryId='';searchDateRange=''">重置</el-button>
+                <el-button type="primary" @click = "helpPagePageList" round>搜索</el-button>
+                <el-button @click="categoryId='';searchDateRange=''" round>重置</el-button>
             </el-form-item>
         </el-form>
         <!-- 帖子列表 -->
@@ -493,9 +493,9 @@ const gotoMyPage = ()=>{
 
         <template #footer>
         <span class="dialog-footer">
-            <el-button type="primary" @click="editHelpPageById">确认修改</el-button>
-            <el-button @click="dialogVisible = false">取消修改</el-button>
-            <el-button type="danger" @click="deleteHelpPageById(echoHelpPage.id)">删除帖子</el-button>
+            <el-button type="primary" @click="editHelpPageById" round>确认修改</el-button>
+            <el-button @click="dialogVisible = false" round>取消修改</el-button>
+            <el-button type="danger" @click="deleteHelpPageById(echoHelpPage.id)" round>删除帖子</el-button>
         </span>
         </template>
 

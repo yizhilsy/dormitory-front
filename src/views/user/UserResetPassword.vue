@@ -74,13 +74,13 @@ const modifyPassword = async()=>{
         <el-col :span="12">
             <el-form label-width="100px" size="large" :model="modifyData" :rules="rules">
                 <el-form-item label="原密码" prop="oldPwd">
-                    <el-input v-model="modifyData.oldPwd"></el-input>
+                    <el-input v-model="modifyData.oldPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item label="新密码" prop="newPwd">
-                    <el-input v-model="modifyData.newPwd"></el-input>
+                    <el-input v-model="modifyData.newPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item label="确认新密码" prop="rePwd">
-                    <el-input v-model="modifyData.rePwd"></el-input>
+                    <el-input v-model="modifyData.rePwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="modifyPassword">提交修改</el-button>
@@ -89,3 +89,9 @@ const modifyPassword = async()=>{
         </el-col>
     </el-card>
 </template> 
+
+<style scoped>
+.el-input{
+    --el-input-border-radius: 20px;
+}
+</style>

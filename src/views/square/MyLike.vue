@@ -2,97 +2,15 @@
     <el-card class="page-container">
       <template #header>
           <div class="header">
-              <span>🔥SHUer友热帖🔥</span>
+              <span style="font-size: 15px;">
+                <IconHeartFill :style="{ color: '#f53f3f' }"/>
+                我的喜欢
+              </span>
               <div class="extra">
-                  <el-button type="primary" @click="visibleDrawer=true" round>发布帖子</el-button>
-                  <el-button type="primary" @click="gotoMyPage" round>我的帖子</el-button>
+                  <el-button type="primary" @click="gotoSHUer" round>返回广场</el-button>
               </div>
           </div>
       </template>
-
-      <div :style="{ display: 'flex' }">
-        <a-carousel
-          :style="{
-            width: '600px',
-            height: '240px',
-          }"
-          :auto-play="true"
-          indicator-type="dot"
-          show-arrow="hover"
-        >
-          <a-carousel-item v-for="item in hotest5Pages"
-            @click="getHelpPageId(item.id)"
-          >
-            <img
-              :src="item.image"
-              :style="{
-                width: '100%',
-                height: '100%',
-              }"
-            />
-          </a-carousel-item>
-        </a-carousel>
-
-        <a-card
-          class="card-demo"
-          title="🔥最热帖子"
-          hoverable
-          style="margin-left: 100px;"
-        >
-          <template #extra>
-            <a-link>More</a-link>
-          </template>
-          <div>
-            <div v-for="(item, idx) in hotest5Pages" :key="idx" class="item">
-              <span class="item-content"
-              @click="hotestClick(item)"
-              :style="{ 'text-decoration': item.underHover ? 'underline' : 'none' }"
-              @mouseover="hotmousein(item)" 
-              @mouseout="hotmouseout(item)"
-              >
-                {{ item.title }}
-              </span>
-              <span>
-                <IconHeartFill :style="{ color: '#f53f3f' }"/>
-                {{ item.likeNum}}
-              </span>
-              <a-tag :color="colors[item.typeId]" size="small" style="margin-left: 20px;">{{ item.typeName }}</a-tag>
-            </div>
-          </div>
-        </a-card>
-
-        <a-card 
-          class="card-demoright"
-          title="漫游广场"
-          hoverable
-          style="margin-left: auto;"
-        >
-            <a-space direction="vertical" fill :size="10">
-              <a-button long @click="gotoMyLike">
-                <span>mylike</span>
-                <template #icon>
-                  <IconHeartFill :style="{ color: '#f53f3f' }"/>
-                </template>
-              </a-button>
-              <a-button long @click="gotoMyPage">
-                <span>mypage</span>
-                <template #icon>
-                  <icon-facebook-square-fill />
-                </template>
-              </a-button>
-              <a-button long >
-                <span>drafts</span>
-                <template #icon>
-                  <icon-branch />
-                </template>
-              </a-button>
-            </a-space>
-          </a-card>
-
-      </div>
-
-      <br/><br/>
-      
 
       <a-tabs default-active-key="0" type="rounded"
       @tab-click="onTabClick"
@@ -149,7 +67,7 @@
                 <span v-else>
                   <IconHeart class="action"/>
                 </span>
-                  {{ item.likeNum }}
+                  {{ item.likeNum}}
               </span>
 
               <span><icon-star />{{ item.id }}</span>
@@ -183,62 +101,7 @@
   </el-card>
   
 
-  <!-- 抽屉 -->
-  <el-drawer v-model="visibleDrawer" title="发布帖子📕" direction="rtl" size="40%" style="background-color: #fef7ff;">
-      <!-- 发布帖子表单 -->
-      <el-form :model="articleModel" label-width="100px" >
-          <el-form-item label="帖子标题" style = "width:60%">
-              <el-input v-model="articleModel.title" placeholder="请输入标题"></el-input>
-          </el-form-item>
-          <el-form-item label="帖子分类">
-              <el-select placeholder="请选择" v-model="articleModel.typeId">
-                  <el-option v-for="c in categorys" :key="c.id" :label="c.typename" :value="c.id">
-                  </el-option>
-              </el-select>
-          </el-form-item>
-          <el-form-item label="发张图片🤳">
-              <!-- auto-upload -->
-
-              <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                  action="https://47.115.229.197:8445/upload"
-                  name="image"
-                  :on-success="uploadSuccess"
-                  :headers="{'Authorization':tokenStore.token}"
-              >
-                  <img v-if="articleModel.image" :src="articleModel.image" class="avatar" />
-                  <el-icon v-else class="avatar-uploader-icon">
-                      <Plus />
-                  </el-icon>
-              </el-upload>
-          </el-form-item>
-          <el-form-item label="帖子内容">
-              <div class="editor">
-                  <!-- <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html"></quill-editor> -->
-                  <el-input
-                      v-model="articleModel.content"
-                      maxlength="200"
-                      placeholder="Please input"
-                      show-word-limit
-                      type="textarea"
-                      :autosize="{ minRows: 4, maxRows: 10 }"
-                  />
-              </div>
-          </el-form-item>
-
-          <el-row>
-              <el-col span="12">
-                  <el-form-item label="联系方式📞" >
-                      <el-input v-model="articleModel.phone" placeholder="请输入手机号码"></el-input>
-                  </el-form-item>
-              </el-col>
-          </el-row>
-
-          <el-form-item>
-              <el-button type="primary" @click="helpPageAdd" round>发布🚀</el-button>
-              <el-button type="info" round>草稿📫</el-button>
-          </el-form-item>
-      </el-form>
-  </el-drawer>
+  
 
 
 
@@ -257,26 +120,7 @@ const tokenStore = useTokenStore();
 
 import useUserInfoStore from '@/stores/userInfo.js'
 const userInfoStore = useUserInfoStore();
-const userInfo = ref({...userInfoStore.info});
-
-// 使用watch监听userInfoStore.info的变化
-const unwatch = watch(
-  () => userInfoStore.info,
-  (newInfo, oldInfo) => {
-    // 检查是否有数据，避免执行多次
-    if (newInfo && Object.keys(newInfo).length > 0) {
-      // 更新userInfo
-      userInfo.value = { ...newInfo };
-      // 执行其他welcome.vue中的逻辑
-      // ...
-
-      // 停止watch，避免重复执行
-      unwatch();
-    }
-  }
-);
-
-
+const userInfo = ref({...userInfoStore.info})
 
 //文章分类数据模型
 const categorys = ref([
@@ -311,7 +155,6 @@ const helpPages = ref([
         "typeId":' ',
         "createTime": ' ',
         "updateTime": ' ',
-        "typeName":' ',
     }
 ])
 
@@ -326,8 +169,7 @@ const appendPages = ref([
         "image":' ',
         "typeId":' ',
         "createTime": ' ',
-        "updateTime": ' ',
-        "typeName":' ',
+        "updateTime": ' '
     }
 ])
 
@@ -344,22 +186,23 @@ const pageNum = ref(1)//当前页
 const total = ref(10)//总条数
 const pageSize = ref(10)//每页条数
 
+const bottom = ref(false);//是否请求完毕
 
 // 设置list表格的数据加载
 const listLoading = ref(true);
 
-// page方式回显帖子初始第一次的回显10页
+// page方式我喜欢的帖子初始第一次的回显10页
 import {echoUserAvatorService} from '@/api/square.js'
-import {helpPagePageListService} from '@/api/square.js'
-const helpPagePageList = async()=>{
+import {myLikePageService} from '@/api/square.js'
+const myLikePage = async() => {
     listLoading.value = true;
-    await typePageList();
+    bottom.value = false;
     let params = {
         page:pageNum.value,
         pageSize:pageSize.value,
         typeId:categoryId.value ? categoryId.value: null,
     }
-    let result = await helpPagePageListService(params);
+    let result = await myLikePageService(params,userInfo.value.id);
     total.value = result.data.total;
     helpPages.value = result.data.rows;
 
@@ -416,12 +259,13 @@ const helpPagePageList = async()=>{
           page.isLike = false;
         }
     }
-
+    if(pageNum.value*pageSize.value>=total.value){
+        bottom.value = true;
+    }
     //加载完成
     listLoading.value = false;
-
 }
-helpPagePageList();
+myLikePage();
 
 // 文章分类标签的颜色
 const colors = ref([
@@ -444,13 +288,14 @@ console.log(colors);
 // page方式追加帖子尝试一次追加10页到appendPages中
 const Append_helpPagePageList = async()=>{
     //listLoading.value = true;
+    bottom.value = false;
     appendPages.value = [];
     let params = {
         page:pageNum.value,
         pageSize:pageSize.value,
         typeId:categoryId.value ? categoryId.value: null,
     }
-    let result = await helpPagePageListService(params);
+    let result = await myLikePageService(params,userInfo.value.id);
     total.value = result.data.total;
     appendPages.value = result.data.rows;
     console.log(result.data.rows);
@@ -514,6 +359,9 @@ const Append_helpPagePageList = async()=>{
         let page = appendPages.value[i];
         helpPages.value.push(page);
     }
+    if(pageNum.value*pageSize.value>=total.value){
+        bottom.value = true;
+    }
     //listLoading.value = false;
 }
 
@@ -553,12 +401,12 @@ const getHelpPageId = async(param)=>{
 }
 
 //路由跳转到我的帖子
-const gotoMyPage = ()=>{
-    router.push('/square/mypage');
+const gotoSHUer = ()=>{
+    router.push('/welcome');
 }
 
 
-const bottom = ref(false);
+// const bottom = ref(false);
 // bitflow字节浪潮核心技术
 import {usebitFlowFlagStore} from '@/stores/bitFlowFlag.js'
 //获取当前详情页在后端数据库的互助帖信息,pinia加载
@@ -579,6 +427,7 @@ watch(
     // 在这里执行当 bitFlowFlagStore.bitFlowFlagInfo.flag 发生变化时的操作
     console.log("======================================");
     console.log('bitFlowFlagStore.bitFlowFlagInfo.flag 发生变化', newValue, oldValue);
+
     // 触发您想要执行的事件
     // 例如：this.$emit('bitFlowFlagStoreChanged', newValue);
     if(newValue==true){ //layout布局滑到底部了
@@ -597,8 +446,6 @@ watch(
   { deep: true } // 使用深度监听，以便在对象内部属性发生变化时也触发
 );
 
-//控制抽屉是否显示
-const visibleDrawer = ref(false)
 
 //发布帖子数据模型
 const articleModel = ref({
@@ -614,47 +461,12 @@ const articleModel = ref({
     updateTime: '',
 })
 
+
 //上传图片成功后绑定到数据模型
 const uploadSuccess = (result) => {
     articleModel.value.image = result.data;
     console.log(result.data);
 }
-
-//添加帖子
-import {helpPageAddService} from '@/api/square.js'
-const helpPageAdd = async()=>{
-    //与userInfo这个vue对象绑定
-    articleModel.value.name = userInfo.value.nickname;
-    articleModel.value.username = userInfo.value.username;
-    //调用接口
-    let result = await helpPageAddService(articleModel.value);
-    ElMessage.success(result.code===1?'发帖成功⭐':'发帖失败');
-
-    //让抽屉消失
-    visibleDrawer.value = false;
-
-    //清空articleModel中的value数据
-    // 将articleModel的属性设置为空字符串
-    articleModel.value = {
-        id: '',
-        username: '',
-        name: '',
-        phone: '',
-        title: '',
-        content: '',
-        image: '',
-        typeId: '',
-        createTime: '',
-        updateTime: '',
-    };
-
-    //刷新当前帖子列表
-    pageNum.value = 1;
-    bottom.value = false;
-    helpPagePageList();
-
-}
-
 
 const images = ref([
       'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp',
@@ -667,17 +479,16 @@ const onTabClick = (key) => {
   if(key != 0 ){
     categoryId.value = key;
     pageNum.value = 1;
-    bottom.value = false;
-    helpPagePageList();
+    //初始请求
+    myLikePage();
   }else {
     categoryId.value = null;
     pageNum.value = 1;
-    bottom.value = false;
-    helpPagePageList();
+    //初始请求
+    myLikePage();
   }
   
 }
-
 
 const nowLike = async(id,uid) => {
   await nowLikeService(id,uid);
@@ -687,6 +498,9 @@ const nowCancel = async(id,uid) => {
   await nowCancelService(id,uid);
 }
 
+const gotoMyLike = () => {
+  router.push('/mylike');
+}
 
 //listitem的点赞script板块
 const like = ref(false);
@@ -696,12 +510,15 @@ const onLikeChange = (item) => {
     item.likeNum = item.likeNum-1;
     nowCancel(item.id,userInfo.value.id);
     ElMessage.success('取消喜欢');
+    
   }else{  //此时是添加喜欢
     item.isLike = !item.isLike;
     item.likeNum = item.likeNum+1;
     nowLike(item.id,userInfo.value.id);
     ElMessage.success('喜欢成功(❤ ω ❤)');
+
   }
+  
   // 阻止事件冒泡，确保不触发默认区域的操作
   event.stopPropagation();
 }
@@ -738,12 +555,10 @@ const hotest5Pages = ref([
         "typeId":' ',
         "createTime": ' ',
         "updateTime": ' ',
-        "typeName": '',
     }
 ])
 
 const getHotest5Pages = async() => {
-  await typePageList();
   let result = await hotest5Service();
   hotest5Pages.value = result.data;
   //设置hotest5Pages的typename字段
@@ -782,13 +597,6 @@ const getHotest5Pages = async() => {
       let page = hotest5Pages.value[i];
       page.underHover = false;
   }
-
-  // 设置hotest5Pages的boardhighlight字段
-  for(let i=0;i<hotest5Pages.value.length;i++){
-      let page = hotest5Pages.value[i];
-      page.boardhighlight = false;
-  }
-
 }
 getHotest5Pages();
 
@@ -804,19 +612,6 @@ const hotestClick = (item) => {
   getHelpPageId(item.id);
 }
 
-// // 控制热帖轮播图是否边框高亮的js逻辑
-// const highlightItem = (item) => {
-//   item.boardhighlight = true;
-// }
-
-// const removeHighlight = (item) => {
-//   item.boardhighlight = false;
-// }
-
-//漫游广场按钮的js逻辑
-const gotoMyLike = () => {
-  router.push('/mylike');
-}
 </script>
 
 <style lang="scss" scoped>
@@ -895,7 +690,6 @@ const gotoMyLike = () => {
   width: 400px;
   margin-left: 24px;
   transition-property: all;
-  background-color: #d9edfc;
 }
 .card-demo:hover {
   transform: translateY(-4px);
