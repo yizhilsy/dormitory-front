@@ -77,7 +77,7 @@ const urls = [
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const backsquare = ()=>{
-    router.push('/square');
+    router.push('/welcome');
 }
 
 const url =
@@ -121,8 +121,69 @@ const cancelreply = () =>{
     visibleDrawer.value = false;
 }
 
+// 文章分类标签的颜色
+const colors = ref([
+      'orangered',
+      'orange',
+      'gold',
+      'lime',
+      'green',
+      'cyan',
+      'blue',
+      'arcoblue',
+      'purple',
+      'pinkpurple',
+      'magenta',
+      'gray'
+]);
 
 
+import {likeNumService} from '@/api/square.js'
+import {whoLikeService} from '@/api/square.js'
+const getLikeInfo = async() => {
+    let result = await likeNumService(helpPages.value.id);
+    helpPages.value.likeNum = result.data;
+    let whoLikeR = await whoLikeService(helpPages.value.id);
+    let whoLike = whoLikeR.data;
+    let flag = false;
+    for(let j=0;j<whoLike.length;j++){
+        if(userInfo.value.id == whoLike[j]){
+            helpPages.value.isLike = true;
+            flag = true;break;
+        }
+    }
+    if(flag == false){
+        helpPages.value.isLike = false;
+    }
+}
+getLikeInfo();
+
+import {nowLikeService} from '@/api/square.js'
+import {nowCancelService} from '@/api/square.js'
+
+const nowLike = async(id,uid) => {
+  await nowLikeService(id,uid);
+}
+
+const nowCancel = async(id,uid) => {
+  await nowCancelService(id,uid);
+}
+
+const onLikeChange = (item) => {
+  if(helpPages.value.isLike){  //此时是取消喜欢
+    helpPages.value.isLike = !helpPages.value.isLike;
+    helpPages.value.likeNum = helpPages.value.likeNum-1;
+    nowCancel(helpPages.value.id,userInfo.value.id);
+    ElMessage.success('取消喜欢');
+  }else{  //此时是添加喜欢
+    helpPages.value.isLike = !helpPages.value.isLike;
+    helpPages.value.likeNum = helpPages.value.likeNum+1;
+    nowLike(helpPages.value.id,userInfo.value.id);
+    ElMessage.success('喜欢成功(❤ ω ❤)');
+  }
+  // 阻止事件冒泡，确保不触发默认区域的操作
+  event.stopPropagation();
+}
 </script>
 
 <template>
@@ -130,9 +191,11 @@ const cancelreply = () =>{
 <el-card class="page-container">
     <template #header>
         <div class="header">
-            <span>帖子详情</span>
+            <a-typography-title :style="{ margin: 0, fontSize: '16px'}" :heading="5">
+                帖子详情
+            </a-typography-title>
             <div class="extra">
-                <el-button type="primary" @click="backsquare">返回广场</el-button>
+                <el-button type="primary" @click="backsquare" round>返回广场</el-button>
             </div>
         </div>
     </template>
@@ -143,6 +206,18 @@ const cancelreply = () =>{
                 <el-form :model="helpPages" label-width="100px" size="large" height="auto">
                     <el-text class="mx-1" size="large" tag="b">帖子标题：</el-text>
                     <el-text class="mx-1" size="large" tag="b" v-text="helpPages.title"></el-text>
+                    <a-tag bordered style="margin-left: 30px;font-size:medium;vertical-align: bottom;" :color="colors[helpPages.typeId]">{{helpPages.typeName}}</a-tag>
+                    <!-- 点赞功能的click标签 -->
+                    <span class="action" key="heart" @click="onLikeChange" style="margin-left: 20px;font-size: 18px;"> 
+                        <span v-if="helpPages.isLike">
+                        <IconHeartFill :style="{ color: '#f53f3f' }"/>
+                        </span>
+                        <span v-else>
+                        <IconHeart class="action"/>
+                        </span>
+                        {{ helpPages.likeNum }}
+                    </span>
+
                     <br/><br/>
                     <el-row>
                         <el-col :span="1">
@@ -153,19 +228,15 @@ const cancelreply = () =>{
                             <el-text class="mx-1" >楼主：</el-text>
                             <el-text class="mx-1" v-text="helpPages.name"></el-text>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <!-- <br/> -->
                             <el-text class="mx-1" >创建时间：</el-text>
                             <el-text class="mx-1" v-text="helpPages.createTime"></el-text>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <!-- <br/> -->
                             <el-text class="mx-1" >更新时间：</el-text>
                             <el-text class="mx-1" v-text="helpPages.updateTime"></el-text>
-                        </el-col>
-                        <el-col :span="4">
-                            <el-text class="mx-1" >分类：</el-text>
-                            <el-text class="mx-1" v-text="helpPages.typeName"></el-text>
                         </el-col>
                     </el-row>
                     
@@ -177,8 +248,6 @@ const cancelreply = () =>{
                                 <el-image  :key="helpPages.image" :src="helpPages.image" lazy />
                             </div>
                             
-
-
                         </el-col>
                         <el-col :span="1">  </el-col>
                         <el-col :span="12">
@@ -195,16 +264,13 @@ const cancelreply = () =>{
         </el-row>    
     </div>
 
-
-
-    <br/><br/><br/>
-    
+    <br/><br/>
     <el-card class="page-container">
         <template #header>
             <div class="header">
                 <span>回帖详情</span>
                 <div class="extra">
-                    <el-button :icon="ChatRound" type="primary" @click="visibleDrawer=true">发表留言</el-button>
+                    <el-button :icon="ChatRound" type="primary" @click="visibleDrawer=true" round>发表留言</el-button>
                 </div>
             </div>
         </template>
@@ -255,8 +321,8 @@ const cancelreply = () =>{
                 <br/>
                 
                 <el-form-item>
-                    <el-button type="primary" @click="replyPagePost(helpPages.id)">回帖</el-button>
-                    <el-button type="info" @click="cancelreply">取消</el-button>
+                    <el-button type="primary" @click="replyPagePost(helpPages.id)" round>回帖</el-button>
+                    <el-button type="info" @click="cancelreply" round>取消</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>
@@ -267,10 +333,6 @@ const cancelreply = () =>{
 
     
 </el-card>
-
-
-
-
 
 </template>
 
@@ -346,8 +408,37 @@ const cancelreply = () =>{
   /* 可以根据需要设置其他样式 */
 }
 
+// 圆角滑动条样式
+::-webkit-scrollbar {
+width: 12px;
+height: 4px;
+}
 
+::-webkit-scrollbar-thumb {
+border: 4px solid transparent;
+background-clip: padding-box;
+border-radius: 10px;
+background-color: var(--color-text-4);
+}
 
+::-webkit-scrollbar-thumb:hover {
+background-color: var(--color-text-3);
+}
+
+// arco爱心样式
+.action {
+  display: inline-block;
+  padding: 0 4px;
+  color: var(--color-text-1);
+  line-height: 24px;
+  background: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.action:hover {
+  background: var(--color-fill-3);
+}
 </style>
 
 

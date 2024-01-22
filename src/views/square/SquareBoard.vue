@@ -5,6 +5,17 @@ import {
     View,
 } from '@element-plus/icons-vue'
 
+import { defineComponent } from 'vue';
+  import { Message} from '@arco-design/web-vue';
+  import {
+    IconCaretRight,
+    IconCaretLeft,
+    IconHome,
+    IconCalendar,
+  } from '@arco-design/web-vue/es/icon';
+
+
+
 import { ref } from 'vue'
 
 import {useTokenStore} from '@/stores/token.js'
@@ -22,7 +33,6 @@ const categorys = ref([
         "typename": "求助",
     }
 ])
-
 
 //用户搜索时选中的分类id
 const categoryId=ref('')
@@ -283,10 +293,11 @@ const gotoMyPage = ()=>{
     <el-card class="page-container">
         <template #header>
             <div class="header">
-                <span>🔥SHUer友热帖🔥</span>
+                
+                <span style="font-size: 15px;"><icon-settings size="20px"/> 管理SHUer友热帖</span>
                 <div class="extra">
-                    <el-button type="primary" @click="visibleDrawer=true">发布帖子</el-button>
-                    <el-button type="primary" @click="gotoMyPage">我的帖子</el-button>
+                    <!-- <el-button type="primary" @click="visibleDrawer=true">发布帖子</el-button> -->
+                    <!-- <el-button type="primary" @click="gotoMyPage">我的帖子</el-button> -->
                 </div>
             </div>
         </template>
@@ -322,8 +333,8 @@ const gotoMyPage = ()=>{
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click = "helpPagePageList">搜索</el-button>
-                <el-button @click="categoryId='';searchDateRange=''">重置</el-button>
+                <el-button type="primary" @click = "helpPagePageList" round>搜索</el-button>
+                <el-button @click="categoryId='';searchDateRange=''" round>重置</el-button>
             </el-form-item>
         </el-form>
         <!-- 帖子列表 -->
@@ -379,7 +390,7 @@ const gotoMyPage = ()=>{
                 <!-- auto-upload -->
 
                 <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                    action="/api/upload"
+                    action="https://47.115.229.197:8445/upload"
                     name="image"
                     :on-success="uploadSuccess"
                     :headers="{'Authorization':tokenStore.token}"
@@ -448,7 +459,7 @@ const gotoMyPage = ()=>{
             <el-form-item label="帖子图片">
                 <!-- auto-upload -->
                 <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
-                    action="/api/upload"
+                    action="https://47.115.229.197:8445/upload"
                     name="image"
                     :on-success="edit_uploadSuccess"
                     :headers="{'Authorization':tokenStore.token}"
@@ -478,23 +489,19 @@ const gotoMyPage = ()=>{
                 <el-input v-model="echoHelpPage.phone" placeholder="请输入标题"></el-input>
             </el-form-item>
             
-
         </el-form>
 
         <template #footer>
         <span class="dialog-footer">
-            <el-button type="primary" @click="editHelpPageById">确认修改</el-button>
-            <el-button @click="dialogVisible = false">取消修改</el-button>
-            <el-button type="danger" @click="deleteHelpPageById(echoHelpPage.id)">删除帖子</el-button>
+            <el-button type="primary" @click="editHelpPageById" round>确认修改</el-button>
+            <el-button @click="dialogVisible = false" round>取消修改</el-button>
+            <el-button type="danger" @click="deleteHelpPageById(echoHelpPage.id)" round>删除帖子</el-button>
         </span>
         </template>
 
     </el-dialog>
 
-    
 </template>
-
-
 
 <style lang="scss" scoped>
 .page-container {

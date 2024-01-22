@@ -61,4 +61,34 @@ export const echoMyPageService = (username) =>{
     return request.get('/square/mypage'+'/'+username);
 }
 
+//调用后端回显指定帖子点赞数
+export const likeNumService = (id) => {
+    return request.get('/square/like'+'/'+id);
+}
+
+//调用后端回显喜欢指定帖子的用户id
+export const whoLikeService = (id) => {
+    return request.get('/square/like/who'+'/'+id);
+}
+
+//调用后端当前用户喜欢了指定的帖子
+export const nowLikeService = (id,u_id) => {
+    return request.get('/square/addlike'+'/'+id+'/'+u_id);
+}
+
+//调用后端当前用户取消喜欢了指定的帖子
+export const nowCancelService = (id,u_id) => {
+    return request.get('/square/cancellike'+'/'+id+'/'+u_id);
+}
+
+// 调用后端查询点赞数最高的几个帖子
+export const hotest5Service = () => {
+    return request.get('/square/hotest5');
+}
+
+// 调用后端回显当前用户喜欢的帖子
+export const myLikePageService = (params,uid) => {
+    return request.get('/square/mylike'+'/'+uid,{params:params});
+}
+
 

@@ -9,7 +9,17 @@ import {
     SwitchButton,
     CaretBottom
 } from '@element-plus/icons-vue'
+import { defineComponent } from 'vue';
+  import { Message} from '@arco-design/web-vue';
+  import {
+    IconCaretRight,
+    IconCaretLeft,
+    IconHome,
+    IconCalendar,
+  } from '@arco-design/web-vue/es/icon';
 import avatar from '@/assets/default.png'
+import { ElNotification } from 'element-plus'
+import { ref } from 'vue';
 
 import { userInfoService } from '@/api/user.js';
 import useUserInfoStore from '@/stores/userInfo.js'
@@ -47,9 +57,9 @@ const handleCommand = (command) => {
         ).then(async () => {
             //退出登录
             //1.清空pinia中存储的token以及个人信息
+            let result = await userLogoutService();
             tokenStore.removeToken();
             userInfoStore.removeInfo();
-            let result = userLogoutService();
             //2.跳转到登录页面
             router.push('/login')
             ElMessage({
@@ -67,139 +77,248 @@ const handleCommand = (command) => {
         router.push('/user/' + command)
     }
 }
+
+// 同步侧栏和顶部导航栏的vue对象
+const currentMenuItem = ref('/welcome');
+
+const onClickMenuItem = (key) => {
+    if(key=="github"){
+        window.open('https://github.com/yizhilsy', '_blank');
+        return;
+    }
+    if(key=="wechatpay"||key=="alipay"){
+        ElNotification({
+            title: '施工中',
+            message: '即将上线 @Elegance-Modernization',
+            type: 'info',
+        })
+        return;
+    }
+    if (key == "logokey"){
+        ElNotification({
+            title: '开发者信息',
+            message: '陆诗雨，陈楠，王志伟，张泽毅 团队@Elegance-Modernization',
+            type: 'info',
+        })
+        return;
+    }
+    // Message.info({ content: `You select ${key}`, showIcon: true });
+    currentMenuItem.value = key;
+    console.log("**********************");
+    router.push(key);
+}
+
+// 帖子数据模型
+const helpPages = ref([
+    {
+        "id": ' ',
+        "username":' ',
+        "name":' ',
+        "phone":' ',
+        "title": ' ',
+        "content": ' ',
+        "image":' ',
+        "typeId":' ',
+        "createTime": ' ',
+        "updateTime": ' '
+    }
+])
+
+
+
+let result = {
+    flag:false,
+}
+let result2 = {
+    flag:true,
+}
+console.log("initinitinit");
+console.log(result);
+
+
+import {usebitFlowFlagStore} from '@/stores/bitFlowFlag.js'
+const bitFlowFlagStore = usebitFlowFlagStore();
+bitFlowFlagStore.removeInfo();
+bitFlowFlagStore.setInfo(result);
+const bitFlowFlag = ref({
+    ...bitFlowFlagStore.bitFlowFlagInfo
+})
+// 字节浪潮bitflow分页查询滚动条部分 createby @shiyulu
+// 监听滚动条
+const handleScroll = (e) => {
+  const {scrollTop, clientHeight, scrollHeight} = e.target
+  // console.log(scrollTop, clientHeight, scrollHeight)
+  if (scrollTop + clientHeight === scrollHeight){
+    console.log("reach the bottom!");
+    // alert("reach the bottom!");
+    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    bitFlowFlagStore.removeInfo();
+    bitFlowFlagStore.setInfo(result2);
+    console.log(bitFlowFlagStore.bitFlowFlagInfo.flag);
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+  }else{
+    bitFlowFlagStore.setInfo(result);
+    console.log(bitFlowFlag.value.flag);
+  }
+}
+
 </script>
 
 <template>
     <el-container class="layout-container">
         <!-- 左侧菜单 -->
-        <el-aside width="250px">
+        <!-- <el-aside width="250px">
             <div class="el-aside__logo"></div>
-            <el-menu active-text-color="#ffd04b" background-color="#232323" text-color="#fff" router>
-                <el-sub-menu v-show="userInfoStore.info.role==0" index="1">
-                    <template #title>
-                        <el-icon>
-                            <Management />
-                        </el-icon>
-                        <span>用户管理</span>
-                    </template>
-                    <el-menu-item index="/manage/addUser">
-                        <el-icon>
-                            <User />
-                        </el-icon>
-                        <span>添加用户</span>
-                    </el-menu-item>
-                    <el-menu-item index="/manage/resetUserPwd">
-                        <el-icon>
-                            <Crop />
-                        </el-icon>
-                        <span>重置用户密码</span>
-                    </el-menu-item>
-                </el-sub-menu>
+            
+        </el-aside> -->
+        <a-layout-sider collapsible breakpoint="xl" width="250px">
+            <div class="logo"></div>
+            <a-menu
+            :default-open-keys="['/welcome']"
+            :default-selected-keys="['/welcome']"
+            :selected-keys="[currentMenuItem]"
+            :style="{ width: '100%' }"
+            @menu-item-click="onClickMenuItem"
+            >
+            <a-menu-item key="/welcome">
+                <icon-lark-color />👨SHUer友广场👩
+            </a-menu-item>
 
-                <el-menu-item index="/square">
-                    <el-icon>
-                        <Promotion />
-                    </el-icon>
-                    <span>👨SHUer友广场👩</span>
-                </el-menu-item>
+            <a-sub-menu key="userCenter">
+                <template #title>
+                    <icon-user></icon-user>个人中心
+                </template>
+                <a-menu-item key="/user/info">
+                    <icon-file />基本资料
+                </a-menu-item>
+                <a-menu-item key="/user/resetPassword">
+                    <icon-edit />修改密码
+                </a-menu-item>
+            </a-sub-menu>
 
-                <el-sub-menu index="1">
-                    <template #title>
-                        <el-icon>
-                            <UserFilled />
-                        </el-icon>
-                        <span>查寝中心</span>
-                    </template>
-                    <el-menu-item index="/dormcheck/Check">
-                        <el-icon>
-                            <User />
-                        </el-icon>
-                        <span>扣分中心</span>
-                    </el-menu-item>
-                    <el-menu-item index="/dormcheck/Appeal">
-                        <el-icon>
-                            <Crop />
-                        </el-icon>
-                        <span>申诉中心</span>
-                    </el-menu-item>
-                    <el-menu-item index="/dormcheck/Process">
-                        <el-icon>
-                            <EditPen />
-                        </el-icon>
-                        <span>申诉处理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/dormcheck/Rank">
-                        <el-icon>
-                            <User />
-                        </el-icon>
-                        <span>鼠鼠榜单</span>
-                    </el-menu-item>
-                </el-sub-menu>
+            <a-sub-menu key="Manage">
+                <template #title>
+                    <icon-command /> 管理菜单
+                </template>
+                <a-menu-item key="/manage/usermanage">
+                    <icon-user-add />管理用户
+                </a-menu-item>
+                <a-menu-item key="/square">
+                    <icon-tool />SHUer帖管理
+                </a-menu-item>
+            </a-sub-menu>
+            <a-menu-item key="yourroute">
+                <icon-find-replace />宿舍查寝
+            </a-menu-item>
+            <a-menu-item key="yourroute">
+                <icon-bg-colors />云端订水
+            </a-menu-item>
 
-                <el-sub-menu index="3">
-                    <template #title>
-                        <el-icon>
-                            <UserFilled />
-                        </el-icon>
-                        <span>鼠鼠水站</span>
-                    </template>
-                    <el-menu-item index="/water/order">
-                        <el-icon>
-                            <User />
-                        </el-icon>
-                        <span>预定中心</span>
-                    </el-menu-item>
-                    <el-menu-item index="/water/backstage">
-                        <el-icon>
-                            <Crop />
-                        </el-icon>
-                        <span>送水后台</span>
-                    </el-menu-item>
-                </el-sub-menu>
+            <a-menu-item key="github">
+                <template #icon>
+                    <icon-github/>
+                </template>
+                Github
+            </a-menu-item>
+
+            <a-menu-item key="wechatpay">
+                <template #icon>
+                    <icon-wechatpay />
+                </template>
+                微信支付
+            </a-menu-item>
+
+            <a-menu-item key="alipay">
+                <template #icon>
+                    <icon-alipay-circle />
+                </template>
+                支付宝
+            </a-menu-item>
+
+            </a-menu>
+            
+            <!-- trigger -->
+            <template #trigger="{ collapsed }">
+                <IconCaretRight v-if="collapsed"></IconCaretRight>
+                <IconCaretLeft v-else></IconCaretLeft>
+            </template>
+        </a-layout-sider>
 
 
-                <el-sub-menu index="2">
-                    <template #title>
-                        <el-icon>
-                            <UserFilled />
-                        </el-icon>
-                        <span>个人中心</span>
-                    </template>
-                    <el-menu-item index="/user/info">
-                        <el-icon>
-                            <User />
-                        </el-icon>
-                        <span>基本资料</span>
-                    </el-menu-item>
-                    <el-menu-item index="/user/avatar">
-                        <el-icon>
-                            <Crop />
-                        </el-icon>
-                        <span>更换头像</span>
-                    </el-menu-item>
-                    <el-menu-item index="/user/resetPassword">
-                        <el-icon>
-                            <EditPen />
-                        </el-icon>
-                        <span>修改密码</span>
-                    </el-menu-item>
-                </el-sub-menu>
-            </el-menu>
-        </el-aside>
+
+
         <!-- 右侧主区域 -->
         <el-container>
             <!-- 头部区域 -->
             <el-header>
-                <div>
+                <div class="menu-demo">
+                    <a-menu 
+                        mode="horizontal" theme="light" 
+                        :default-open-keys="['/welcome']"
+                        :default-selected-keys="['/welcome']"
+                        :selected-keys="[currentMenuItem]"
+                        :style="{ width: '100%' }"
+                        @menu-item-click="onClickMenuItem"
+                    >
+                    <a-menu-item key="logokey" :style="{ padding: 0, marginRight: '38px' }" >
+                        <!-- <div :style="{width: '60px',height: '40px',cursor: 'text',color: '#1d2129'}">
+                            <span>111</span>
+                        </div> -->
+                        <a-space>
+                            <img alt="logo" src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image" style="vertical-align: middle;height: 20px;"/>
+                            <a-typography-title :style="{ margin: 0, fontSize: '18px' }" :heading="5">
+                            Dorm Life
+                            </a-typography-title>
+                        </a-space>
+                        
+                    </a-menu-item>
+                    <a-menu-item key="/welcome">
+                        <icon-lark-color />👨SHUer友广场👩
+                    </a-menu-item>
+
+                    <a-sub-menu key="userCenter">
+                        <template #title>
+                            <icon-user></icon-user>个人中心
+                        </template>
+                        <a-menu-item key="/user/info">
+                            <icon-file />基本资料
+                        </a-menu-item>
+                        <a-menu-item key="/user/resetPassword">
+                            <icon-edit />修改密码
+                        </a-menu-item>
+                    </a-sub-menu>
+
+                    <a-sub-menu key="Manage">
+                        <template #title>
+                            <icon-command /> 管理菜单
+                        </template>
+                        <a-menu-item key="/manage/usermanage">
+                            <icon-user-add />用户管理
+                        </a-menu-item>
+                        <a-menu-item key="/square">
+                            <icon-tool />SHUer帖管理
+                        </a-menu-item>
+                    </a-sub-menu>
+                    <a-menu-item key="yourroute">
+                        <icon-find-replace />宿舍查寝
+                    </a-menu-item>
+                    <a-menu-item key="yourroute">
+                        <icon-bg-colors />云端订水
+                    </a-menu-item>
+                    </a-menu>
+                </div>
+
+                <div style="white-space: nowrap;margin-right: 30px;">
                     <span v-show="userInfoStore.info.role == 0">管理员：</span>
                     <span v-show="userInfoStore.info.role == 1">宿管：</span>
                     <span v-show="userInfoStore.info.role == 2">水站工作人员：</span>
                     <span v-show="userInfoStore.info.role == 3">学生：</span>
                     <strong>{{ userInfoStore.info.nickname }}</strong>
                 </div>
+                
                 <!-- 下拉菜单 -->
                 <!-- command: 条目被点击后会触发，在事件函数上可声明一个参数接收条目对应的指令 -->
-                <el-dropdown placement="bottom-end" @command="handleCommand">
+                <el-dropdown placement="bottom-end" @command="handleCommand" >
                     <span class="el-dropdown__box">
                         <el-avatar :src="userInfoStore.info.userPic ? userInfoStore.info.userPic : avatar" />
                         <el-icon>
@@ -216,15 +335,24 @@ const handleCommand = (command) => {
                     </template>
                 </el-dropdown>
             </el-header>
+
+
             <!-- 中间区域 -->
-            <el-main>
+            <el-main style="width: 82%;margin: 0 auto;" @scroll="handleScroll">
+                <a-back-top target-container="#basic-demo" :style="{position:'absolute'}" />
                 <!-- <div style="width: 1290px; height: 570px;border: 1px solid red;">
                     内容展示区
                 </div> -->
                 <router-view></router-view>
             </el-main>
             <!-- 底部区域 -->
-            <el-footer>校园轻舍 ©2023 Created by Elegance-Modernization</el-footer>
+            <el-footer>
+                Dorm Life 生活轻舍 ©2024 Created by Elegance-Modernization
+                <a-tag color="gray"><template #icon><icon-github/></template>Github</a-tag>
+                <a-tag color="blue"><template #icon><icon-twitter/></template>Twitter</a-tag>
+                <a-tag color="arcoblue"><template #icon><icon-facebook/></template>Facebook</a-tag>
+                <a-tag color="gray"><template #icon><icon-google /></template>Google</a-tag>
+            </el-footer>
         </el-container>
     </el-container>
 </template>
@@ -276,4 +404,77 @@ const handleCommand = (command) => {
         color: #666;
     }
 }
+
+// arco左侧导航栏样式
+.layout-demo {
+    height: 1000px;
+    background: var(--color-fill-2);
+    border: 1px solid var(--color-border);
+  }
+  .layout-demo :deep(.arco-layout-sider) .logo {
+    height: 32px;
+    margin: 12px 8px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .layout-demo :deep(.arco-layout-sider-light) .logo{
+    background: var(--color-fill-2);
+  }
+  .layout-demo :deep(.arco-layout-header)  {
+    height: 64px;
+    line-height: 64px;
+    background: var(--color-bg-3);
+  }
+  .layout-demo :deep(.arco-layout-footer) {
+    height: 48px;
+    color: var(--color-text-2);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 48px;
+  }
+  .layout-demo :deep(.arco-layout-content) {
+    color: var(--color-text-2);
+    font-weight: 400;
+    font-size: 14px;
+    background: var(--color-bg-3);
+  }
+  .layout-demo :deep(.arco-layout-footer),
+  .layout-demo :deep(.arco-layout-content)  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--color-white);
+    font-size: 16px;
+    font-stretch: condensed;
+    text-align: center;
+  }
+
+
+
+// arco上侧导航栏样式  
+.menu-demo {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 40px;
+  background-color: var(--color-neutral-2);
+  margin: 0 auto;
+  padding: 0%;
+}
+
+// 圆角滑动条样式
+::-webkit-scrollbar {
+width: 16px;
+height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+border: 4px solid transparent;
+background-clip: padding-box;
+border-radius: 10px;
+background-color: var(--color-text-4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+background-color: var(--color-text-3);
+}
+
 </style>
