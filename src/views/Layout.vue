@@ -103,6 +103,61 @@ const handleCommand = (command) => {
                     <span>👨SHUer友广场👩</span>
                 </el-menu-item>
 
+                <el-sub-menu index="1">
+                    <template #title>
+                        <el-icon>
+                            <UserFilled />
+                        </el-icon>
+                        <span>查寝中心</span>
+                    </template>
+                    <el-menu-item index="/dormcheck/Check">
+                        <el-icon>
+                            <User />
+                        </el-icon>
+                        <span>扣分中心</span>
+                    </el-menu-item>
+                    <el-menu-item index="/dormcheck/Appeal">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>申诉中心</span>
+                    </el-menu-item>
+                    <el-menu-item index="/dormcheck/Process">
+                        <el-icon>
+                            <EditPen />
+                        </el-icon>
+                        <span>申诉处理</span>
+                    </el-menu-item>
+                    <el-menu-item index="/dormcheck/Rank">
+                        <el-icon>
+                            <User />
+                        </el-icon>
+                        <span>鼠鼠榜单</span>
+                    </el-menu-item>
+                </el-sub-menu>
+
+                <el-sub-menu index="3">
+                    <template #title>
+                        <el-icon>
+                            <UserFilled />
+                        </el-icon>
+                        <span>鼠鼠水站</span>
+                    </template>
+                    <el-menu-item index="/water/order">
+                        <el-icon>
+                            <User />
+                        </el-icon>
+                        <span>预定中心</span>
+                    </el-menu-item>
+                    <el-menu-item index="/water/backstage">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>送水后台</span>
+                    </el-menu-item>
+                </el-sub-menu>
+
+
                 <el-sub-menu index="2">
                     <template #title>
                         <el-icon>

@@ -13,6 +13,12 @@ import UserResetPasswordVue from '@/views/user/UserResetPassword.vue'
 import SquareBoardVue from '@/views/square/SquareBoard.vue'
 import pageInfoVue from '@/views/page/pageInfo.vue'
 import mypage from '@/views/square/mypage.vue'
+import CheckVue from '@/views/dormcheck/Check.vue'
+import AppealVue from '@/views/dormcheck/Appeal.vue'
+import ProcessVue from '@/views/dormcheck/Process.vue'
+import RankVue from '@/views/dormcheck/Rank.vue'
+import OrderVue from '@/views/water/order.vue'
+import BackstageVue from '@/views/water/backstage.vue'
 
 
 
@@ -28,7 +34,13 @@ const routes = [
         {path:'/user/resetPassword',component:UserResetPasswordVue},
         {path:'/square',component:SquareBoardVue},
         {path:'/square/pageInfo',component:pageInfoVue},
-        {path:'/square/mypage',component:mypage}
+        {path:'/square/mypage',component:mypage},
+        {path:'/dormcheck/Check',component:CheckVue},
+        {path:'/dormcheck/Appeal',component:AppealVue},
+        {path:'/dormcheck/Process',component:ProcessVue},
+        {path:'/dormcheck/Rank',component:RankVue},
+        {path:'/water/order',component:OrderVue},
+        {path:'/water/backstage',component:BackstageVue}
     ]}
 ]
 
