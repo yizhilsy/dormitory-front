@@ -51,29 +51,33 @@ BottomList();
 
 <template>
   <el-row>
-    <el-col :span="12">
+    <el-col :span="11">
       <el-card class="page-container">
         <template #header>
           <div class="header">
-            <span>👨‍🏫鼠鼠红榜👨‍🏫</span>
+            <span style="font-size: 36px;">👨‍🏫鼠鼠红榜👨‍🏫</span>
           </div>
         </template>
-        <el-table :data="rankRed" style="width: 100%">
+        <el-table :data="rankRed" style="width: 100%" >
+          <el-table-column label="排名" type="index" width="80"></el-table-column>
           <el-table-column label="学号" prop="studentNumber"> </el-table-column>
+          <el-table-column label="宿舍号" prop="dormNumber"></el-table-column>
           <el-table-column label="本月得分" prop="monthlyScore"> </el-table-column>
         </el-table>
       </el-card>
     </el-col>
-
-    <el-col :span="12">
+    <el-col :span="2"></el-col>
+    <el-col :span="11">
       <el-card class="page-container">
         <template #header>
           <div class="header">
-            <span>👨‍🏫鼠鼠黑榜👨‍🏫</span>
+            <span style="font-size: 36px;">👨‍🏫鼠鼠黑榜👨‍🏫</span>
           </div>
         </template>
         <el-table :data="categorys1" style="width: 100%">
+          <el-table-column label="排名" type="index" width="80"></el-table-column>
           <el-table-column label="学号" prop="studentNumber"> </el-table-column>
+          <el-table-column label="宿舍号" prop="dormNumber"></el-table-column>
           <el-table-column label="本月得分" prop="monthlyScore"> </el-table-column>
         </el-table>
       </el-card>

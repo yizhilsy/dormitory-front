@@ -65,7 +65,7 @@ const CheckList = async()=>{
         dateStr: format(new Date() , 'yyyy-MM-dd HH:mm:ss')
     } 
     let result = await CheckService(params);
-    c.value = result.data.total;
+    total.value = result.data.total;
     categorys.value = result.data.items;
 }
 CheckList();
@@ -120,7 +120,7 @@ const offSubmit = async() =>{
     CheckList();
     dialogVisible.value = false;
 }
-
+console.log(category.value.balcony);
 </script>
 
 
@@ -163,7 +163,8 @@ const offSubmit = async() =>{
                 </el-form-item>
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="https://47.115.229.197:8445/upload" :on-success="uploadSuccess1" name="image"
-                    :headers="{'Authorization':tokenStore.token}">
+                    :headers="{'Authorization':tokenStore.token}"
+                    v-if="category.balcony == 0 ? false:true">
                         <img v-if="category.dailyPenaltyImageUrlForBalcony" :src="category.dailyPenaltyImageUrlForBalcony" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -183,7 +184,9 @@ const offSubmit = async() =>{
                 </el-form-item>
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="https://47.115.229.197:8445/upload" :on-success="uploadSuccess2" name="image"
-                    :headers="{'Authorization':tokenStore.token}">
+                    :headers="{'Authorization':tokenStore.token}"
+                    v-if="category.rubbish == 0 ? false:true"
+                    >
                         <img v-if="category.dailyPenaltyImageUrlForRubbish" :src="category.dailyPenaltyImageUrlForRubbish" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -203,7 +206,9 @@ const offSubmit = async() =>{
                 </el-form-item>
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="https://47.115.229.197:8445/upload" :on-success="uploadSuccess3" name="image"
-                    :headers="{'Authorization':tokenStore.token}">
+                    :headers="{'Authorization':tokenStore.token}"
+                    v-if="category.desk == 0 ? false:true"
+                    >
                         <img v-if="category.dailyPenaltyImageUrlForDesk" :src="category.dailyPenaltyImageUrlForDesk" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -223,7 +228,9 @@ const offSubmit = async() =>{
                 </el-form-item>
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="https://47.115.229.197:8445/upload" :on-success="uploadSuccess4" name="image"
-                    :headers="{'Authorization':tokenStore.token}">
+                    :headers="{'Authorization':tokenStore.token}"
+                    v-if="category.floor == 0 ? false:true"
+                    >
                         <img v-if="category.dailyPenaltyImageUrlForFloor" :src="category.dailyPenaltyImageUrlForFloor" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -243,7 +250,9 @@ const offSubmit = async() =>{
                 </el-form-item>
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="https://47.115.229.197:8445/upload" :on-success="uploadSuccess5" name="image"
-                    :headers="{'Authorization':tokenStore.token}">
+                    :headers="{'Authorization':tokenStore.token}"
+                    v-if="category.quilt == 0 ? false:true"
+                    >
                         <img v-if="category.dailyPenaltyImageUrlForQuilt" :src="category.dailyPenaltyImageUrlForQuilt" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />

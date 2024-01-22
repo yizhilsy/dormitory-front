@@ -98,19 +98,22 @@ const uploadSuccess = (result)=>{
 </script>
 
 <template>
+  <br/>
   <el-row class="container" style="margin-top: -20px;">
     <el-col :span="24" style="text-align: center;" >
       <el-text tag="mark" style="font-size: 35px; font-weight: bold;" >🏠合理申诉，当天处理，快乐生活🏠</el-text>
     </el-col>
-    <el-table :data="appeals" style="width: 100%">
+
+    <el-table :data="appeals" style="width: 100%;margin-top: 20px;">
             <el-table-column label="学号" prop="studentNumber"> </el-table-column>
             <el-table-column label="检查时间" prop="checkTime"></el-table-column>
             <el-table-column label="扣分原因" prop="checkReason"></el-table-column>
             <el-table-column label="被扣分数" prop="checkValue"></el-table-column>
             <el-table-column label="状态" prop="status"></el-table-column>
-            <el-table-column label="申诉" width="100">
+            <el-table-column label="申诉" width="100" >
                 <template #default="{ row }">
-                    <el-button :icon="Edit" circle plain type="primary" @click="dialogVisible = true; cid = row.id; appealNow = row"></el-button>
+                    <el-button :icon="Edit" circle plain type="primary" @click="dialogVisible = true; cid = row.id; appealNow = row"
+                    :disabled="row.status!=='已扣分'"></el-button>
                 </template>
             </el-table-column>
             <template #empty>

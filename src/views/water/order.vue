@@ -304,8 +304,8 @@ const PayForAll = async() => {
 
 
     <el-drawer v-model="dialogVisibleDelete" title="查询&取消" direction="rtl" size="50%">
-        <el-table :data="AllOrders" style="width: 100%" :default-sort="{prop: 'waterOrderId', order: 'descending'}">
-            <el-table-column label="订单编号" prop="waterOrderId"></el-table-column>
+        <el-table :data="AllOrders" style="width: 100%" :default-sort="{prop: 'waterOrderId'}">
+            <el-table-column label="账单编号" prop="waterOrderId"></el-table-column>
             <el-table-column label="订单编号" prop="waterOrderNumber"></el-table-column>
             <el-table-column label="订水时间" prop="waterOrderTime"></el-table-column>
             <el-table-column label="订单状态" prop="waterOrderStatus"></el-table-column>

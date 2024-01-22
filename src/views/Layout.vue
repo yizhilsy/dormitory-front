@@ -196,7 +196,7 @@ const handleScroll = (e) => {
                 </a-menu-item>
             </a-sub-menu>
 
-            <a-sub-menu key="Manage">
+            <a-sub-menu key="Manage" v-if="userInfoStore.info.role === 0">
                 <template #title>
                     <icon-command /> 管理菜单
                 </template>
@@ -207,12 +207,36 @@ const handleScroll = (e) => {
                     <icon-tool />SHUer帖管理
                 </a-menu-item>
             </a-sub-menu>
-            <a-menu-item key="yourroute">
-                <icon-find-replace />宿舍查寝
-            </a-menu-item>
-            <a-menu-item key="yourroute">
-                <icon-bg-colors />云端订水
-            </a-menu-item>
+
+            <a-sub-menu key="DormCheck">
+                <template #title>
+                    <icon-find-replace />宿舍查寝
+                </template>
+                <a-menu-item key="/dormcheck/Check" v-if="userInfoStore.info.role === 0 || userInfoStore.info.role === 1">
+                    <icon-bar-chart />扣分中心
+                </a-menu-item>
+                <a-menu-item key="/dormcheck/Process" v-if="userInfoStore.info.role === 0 || userInfoStore.info.role === 1">
+                    <icon-import />申诉处理
+                </a-menu-item>
+                <a-menu-item key="/dormcheck/Appeal" v-if="userInfoStore.info.role === 3">
+                    <icon-at />查询&&申诉
+                </a-menu-item>
+                <a-menu-item key="/dormcheck/Rank">
+                    <icon-trophy />SHUer榜单
+                </a-menu-item>
+            </a-sub-menu>
+
+            <a-sub-menu key="WaterCloud">
+                <template #title>
+                    <icon-bg-colors />云端订水
+                </template>
+                <a-menu-item key="/water/order" v-if="userInfoStore.info.role === 3">
+                    <icon-send />我要订水
+                </a-menu-item>
+                <a-menu-item key="/water/backstage" v-if="userInfoStore.info.role === 0 || userInfoStore.info.role === 2">
+                    <icon-tool />水站后台
+                </a-menu-item>
+            </a-sub-menu>
 
             <a-menu-item key="github">
                 <template #icon>
@@ -288,7 +312,7 @@ const handleScroll = (e) => {
                         </a-menu-item>
                     </a-sub-menu>
 
-                    <a-sub-menu key="Manage">
+                    <a-sub-menu key="Manage" v-if="userInfoStore.info.role === 0">
                         <template #title>
                             <icon-command /> 管理菜单
                         </template>
@@ -299,12 +323,35 @@ const handleScroll = (e) => {
                             <icon-tool />SHUer帖管理
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-menu-item key="yourroute">
-                        <icon-find-replace />宿舍查寝
-                    </a-menu-item>
-                    <a-menu-item key="yourroute">
-                        <icon-bg-colors />云端订水
-                    </a-menu-item>
+                    <a-sub-menu key="DormCheck">
+                        <template #title>
+                            <icon-find-replace />宿舍查寝
+                        </template>
+                        <a-menu-item key="/dormcheck/Check" v-if="userInfoStore.info.role === 0 || userInfoStore.info.role === 1">
+                            <icon-bar-chart />扣分中心
+                        </a-menu-item>
+                        <a-menu-item key="/dormcheck/Process" v-if="userInfoStore.info.role === 0 || userInfoStore.info.role === 1">
+                            <icon-import />申诉处理
+                        </a-menu-item>
+                        <a-menu-item key="/dormcheck/Appeal" v-if="userInfoStore.info.role === 3">
+                            <icon-at />查询&&申诉
+                        </a-menu-item>
+                        <a-menu-item key="/dormcheck/Rank">
+                            <icon-trophy />SHUer榜单
+                        </a-menu-item>
+                    </a-sub-menu>
+
+                    <a-sub-menu key="WaterCloud">
+                        <template #title>
+                            <icon-bg-colors />云端订水
+                        </template>
+                        <a-menu-item key="/water/order" v-if="userInfoStore.info.role === 3">
+                            <icon-send />我要订水
+                        </a-menu-item>
+                        <a-menu-item key="/water/backstage" v-if="userInfoStore.info.role === 2 || userInfoStore.info.role === 0">
+                            <icon-tool />水站后台
+                        </a-menu-item>
+                    </a-sub-menu>
                     </a-menu>
                 </div>
 
