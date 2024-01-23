@@ -581,13 +581,13 @@ watch(
     console.log('bitFlowFlagStore.bitFlowFlagInfo.flag 发生变化', newValue, oldValue);
     // 触发您想要执行的事件
     // 例如：this.$emit('bitFlowFlagStoreChanged', newValue);
-    if(newValue==true){ //layout布局滑到底部了
+    if(newValue==true&&oldValue==false){ //layout布局滑到底部了
       //判断是否还能继续请求
       if(pageNum.value*pageSize.value<total.value){ //可以继续请求
         pageNum.value = pageNum.value + 1;
         console.log(pageNum.value,pageSize.value,"再次请求！！！");
         Append_helpPagePageList();
-      }else{
+      }else {
         // 帖子已经全部请求，设置bottom为false;
         bottom.value = true;
         console.log("all helpPages has been there...");
