@@ -251,7 +251,7 @@ console.log(category.value.balcony);
                     <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
                     action="https://47.115.229.197:8445/upload" :on-success="uploadSuccess5" name="image"
                     :headers="{'Authorization':tokenStore.token}"
-                    v-if="category.quilt == 0 ? false:true"
+                    v-if="category.quilt === 0 ? false:true"
                     >
                         <img v-if="category.dailyPenaltyImageUrlForQuilt" :src="category.dailyPenaltyImageUrlForQuilt" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
