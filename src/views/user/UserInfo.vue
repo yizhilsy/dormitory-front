@@ -106,7 +106,7 @@ const updateAvatar = async()=>{
                         :on-success="uploadSuccess"
                         >
                         <img v-if="imgUrl" :src="imgUrl" class="avatar" />
-                        <img v-else src="avatar" width="278" />
+                        <img v-else src="https://roy064.oss-cn-shanghai.aliyuncs.com/library/196963a0-52ea-4d2d-b4ad-f8cc0efdbb34.jpg" width="278" />
                     </el-upload>
                     <br><br>
                     <el-form-item label="用户邮箱" prop="email">
