@@ -416,10 +416,11 @@ const helpPagePageList = async()=>{
           page.isLike = false;
         }
     }
-
+    if(pageNum.value*pageSize.value>=total.value){
+        bottom.value = true;
+    }
     //加载完成
     listLoading.value = false;
-
 }
 helpPagePageList();
 
@@ -444,6 +445,7 @@ console.log(colors);
 // page方式追加帖子尝试一次追加10页到appendPages中
 const Append_helpPagePageList = async()=>{
     //listLoading.value = true;
+    bottom.value = false;
     appendPages.value = [];
     let params = {
         page:pageNum.value,
@@ -513,6 +515,9 @@ const Append_helpPagePageList = async()=>{
     for(let i=0;i<appendPages.value.length;i++){
         let page = appendPages.value[i];
         helpPages.value.push(page);
+    }
+    if(pageNum.value*pageSize.value>=total.value){
+        bottom.value = true;
     }
     //listLoading.value = false;
 }

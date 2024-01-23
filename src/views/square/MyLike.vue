@@ -430,7 +430,7 @@ watch(
 
     // 触发您想要执行的事件
     // 例如：this.$emit('bitFlowFlagStoreChanged', newValue);
-    if(newValue==true){ //layout布局滑到底部了
+    if(newValue==true&&oldValue==false){ //layout布局滑到底部了
       //判断是否还能继续请求
       if(pageNum.value*pageSize.value<total.value){ //可以继续请求
         pageNum.value = pageNum.value + 1;
