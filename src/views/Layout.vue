@@ -148,7 +148,7 @@ const bitFlowFlag = ref({
 const handleScroll = (e) => {
   const {scrollTop, clientHeight, scrollHeight} = e.target
   // console.log(scrollTop, clientHeight, scrollHeight)
-  if (scrollTop + clientHeight  >= scrollHeight - 400){
+  if (scrollTop + clientHeight  >= scrollHeight - 1000){
     console.log("reach the bottom!");
     // alert("reach the bottom!");
     console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$");
