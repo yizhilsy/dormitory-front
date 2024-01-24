@@ -210,12 +210,12 @@ const PayForAll = async() => {
  <div class="container">
     <el-card class="box-card">
         <div class="text item" style="font-size: 25px;">
-            <p style="font-size: 30px;">您的用户名: <br>
+            <p style="font-size: 30px;">您的用户名🤡: <br>
                 <el-text tag="mark" style="font-size: 25px; font-weight: bold; margin-left: 20px;">{{userInfo.username}}</el-text></p>
-            <p style="font-size: 30px;">您的宿舍号: <br>
+            <p style="font-size: 30px;">您的宿舍号📜: <br>
                 <el-text tag="mark" style="font-size: 25px; font-weight: bold; margin-left: 20px;">{{studentInfomation.dormNumber}}</el-text></p>
-            <p style="font-size: 30px;">当前应缴费: <br>
-                <el-text tag="mark" style="font-size: 25px; font-weight: bold; margin-left: 20px; margin-right: 20px;">{{monthlyData.currentPrice}}</el-text>
+            <p style="font-size: 30px;">当前应缴费💰: <br>
+                <el-text tag="mark" style="font-size: 25px; font-weight: bold; margin-left: 20px; margin-right: 20px;">{{monthlyData.currentPrice}}元</el-text>
                 <el-button type="warning"  @click="dialogVisiblePay = true">一键付款</el-button>
             </p>
         </div>
@@ -233,7 +233,7 @@ const PayForAll = async() => {
         </div>
     </el-card>
 
-    <el-dialog v-model="dialogVisiblePay" title="您的帐单" width="30%">
+    <el-dialog v-model="dialogVisiblePay" title="💰您的帐单💰" width="30%">
         <el-table
             :data="PayBills"
             height="200"
@@ -252,7 +252,7 @@ const PayForAll = async() => {
     </el-dialog>
 
 
-    <el-drawer v-model="dialogVisibleOrder" title="订个水吧" direction="rtl" size="40%">
+    <el-drawer v-model="dialogVisibleOrder" title="💰订个水吧💰" direction="rtl" size="40%">
         <el-table :data="StationAndPrice" style="width: 100%">
             <template #header>
             <div class="header">
@@ -265,7 +265,7 @@ const PayForAll = async() => {
         </el-table>
         <p></p>
         <el-form>
-            <el-form-item label="所选水站">
+            <el-form-item label="🏠所选水站">
                 <el-select v-model="waterOrder.waterStationId" placeholder="请选择水站">
                     <el-option
                         v-for="station in StationAndPrice"
@@ -275,7 +275,7 @@ const PayForAll = async() => {
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="定水数量">
+            <el-form-item label="📈定水数量">
                 <el-select v-model="waterOrder.waterCount" placeholder="请选择定水数量">
                     <el-option label="1" value="1"></el-option>
                     <el-option label="2" value="2"></el-option>
@@ -284,7 +284,7 @@ const PayForAll = async() => {
                     <el-option label="5" value="5"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="配送日期">
+            <el-form-item label="⏰️配送日期">
                 <el-date-picker
                     v-model="date"
                     type="datetime"
@@ -303,7 +303,7 @@ const PayForAll = async() => {
     </el-drawer>
 
 
-    <el-drawer v-model="dialogVisibleDelete" title="查询&取消" direction="rtl" size="50%">
+    <el-drawer v-model="dialogVisibleDelete" title="✅查询❌取消" direction="rtl" size="50%">
         <el-table :data="AllOrders" style="width: 100%">
             <el-table-column label="账单编号" prop="waterOrderId"></el-table-column>
             <el-table-column label="订单编号" prop="waterOrderNumber"></el-table-column>
