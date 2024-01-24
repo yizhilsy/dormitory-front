@@ -105,12 +105,12 @@ const uploadSuccess = (result)=>{
     </el-col>
 
     <el-table :data="appeals" style="width: 100%;margin-top: 20px;">
-            <el-table-column label="学号" prop="studentNumber"> </el-table-column>
-            <el-table-column label="检查时间" prop="checkTime"></el-table-column>
-            <el-table-column label="扣分原因" prop="checkReason"></el-table-column>
-            <el-table-column label="被扣分数" prop="checkValue"></el-table-column>
-            <el-table-column label="状态" prop="status"></el-table-column>
-            <el-table-column label="申诉" width="100" >
+            <el-table-column label="🤡学号🤡" prop="studentNumber"> </el-table-column>
+            <el-table-column label="⏰检查时间⏰" prop="checkTime"></el-table-column>
+            <el-table-column label="📜扣分原因📜" prop="checkReason"></el-table-column>
+            <el-table-column label="❗️被扣分数❗️" prop="checkValue"></el-table-column>
+            <el-table-column label="🙇🏻状态🙇🏻" prop="status"></el-table-column>
+            <el-table-column label="🙋🏻‍♂️申诉🙋🏻‍♂️" width="100" >
                 <template #default="{ row }">
                     <el-button :icon="Edit" circle plain type="primary" @click="dialogVisible = true; cid = row.id; appealNow = row"
                     :disabled="row.status!=='已扣分'"></el-button>
@@ -121,8 +121,8 @@ const uploadSuccess = (result)=>{
             </template>
         </el-table>
 
-        <el-drawer v-model="dialogVisible" title="扣分申诉" direction="rtl" size="45%">
-            <el-form-item label="扣分理由："> <el-image :src="appealNow.checkImg" ></el-image></el-form-item>
+        <el-drawer v-model="dialogVisible" title="👊扣分申诉👊" direction="rtl" size="45%">
+            <el-form-item label="❗️扣分理由："> <el-image :src="appealNow.checkImg" ></el-image></el-form-item>
             <el-form :model="appeal" label-width="100px" >
                 <el-form-item label="申诉理由：">
                     <el-input v-model="appeal.appealReason">
@@ -140,7 +140,7 @@ const uploadSuccess = (result)=>{
                 </el-form-item>
                
                 <el-form-item>
-                    <el-button type="primary" @click="SendAppeal">提交</el-button>
+                    <el-button type="primary" @click="SendAppeal">🙏🏻求你别扣我分🙏🏻</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>
