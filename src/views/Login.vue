@@ -91,7 +91,11 @@ const clearRegisterData = ()=>{
 
 <template>
     <el-row class="login-page">
-        <el-col :span="12" class="bg"></el-col>
+        <el-col :span="12" class="bg">
+            <div class="hero">
+                <h1>Dorm Life<br><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;生活轻舍</h1>
+            </div>
+        </el-col>
         <el-col :span="6" :offset="3" class="form">
             <!-- 注册表单 -->
             <el-form ref="form" size="large" autocomplete="off" v-if="isRegister" :model="registerData" :rules="rules">
@@ -144,17 +148,48 @@ const clearRegisterData = ()=>{
     </el-row>
 </template>
 
-<style lang="scss" scoped>
-/* 样式 */
+<style>
+:root {
+    --primary-color: #4460f1;
+    --white-color: #ffffff;
+
+    --light-text-color: #9398b3;
+    --light-bg-color: #f2f4ff;
+    --dark-color: #333333;
+
+    --background-color: #fcfcff;
+
+    --el-border-radius-base: 50px;
+}
+
+* {
+    font-family: 'Noto Sans SC', sans-serif;
+}
+
+.hero {
+    position: absolute;
+    top: 200px;
+    left: 200px;
+}
+
+.hero h1 {
+    font-size: 100px;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 380px;
+    height:280px;
+    background: linear-gradient(to right, var(--primary-color), #c471ed, #f64f59);
+    z-index: -1;
+    filter: blur(70px);
+}
+
+
 .login-page {
     height: 100vh;
-    background-color: #fff;
-
-    .bg {
-        background: url('@/assets/logo2.png') no-repeat 60% center / 240px auto,
-            url('@/assets/lifedorm02.jpg') no-repeat center / cover;
-        border-radius: 0 20px 20px 0;
-    }
 
     .form {
         display: flex;
@@ -177,4 +212,12 @@ const clearRegisterData = ()=>{
         }
     }
 }
+
+
+/*搜索input框 */
+.el-input{
+    --el-input-border-radius: 20px;
+}
+
+
 </style>
