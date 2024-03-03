@@ -6,7 +6,7 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 //定义一个变量,记录公共的前缀  ,  baseURL
 
-const baseURL = 'https://47.115.229.197:8445';
+const baseURL = '/api';
 
 const instance = axios.create({baseURL})
 
